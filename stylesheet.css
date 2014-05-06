@@ -1,0 +1,157 @@
+QWidget { 
+	background-color: #363636;
+	color: #ddd;
+}
+
+QCheckBox {
+	background-color: rgba(0, 0, 0, 0);
+}
+
+QTextEdit {
+	background-color: #2d2d2d;
+	border: 1px solid #363636;
+}
+
+QMenuBar, QMenuBar::item {
+	background-color: #444444;
+	color: #ddd;
+}
+
+QLineEdit {
+	border: 1px solid #474747;
+	min-height: 20px;
+}
+
+QLineEdit:hover, QLineEdit:focus {
+	border: 1px solid #00aaaa;	
+}
+
+QTabBar::tab {
+	background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #555555, stop: 1 #444444);
+}
+
+QTabBar::tab:selected {
+	background-color: #777777;
+}
+
+QTreeView::item {
+	font-size: 8px;
+}
+
+QHeaderView::section {
+	background-color: #444;
+	border-left: 3px solid #666;
+
+}
+
+QTableView {
+	border: 1px solid #474747;
+}
+
+QTableView {
+	background-color: #2d2d2d;
+}
+
+IDAView, hexview_t, CustomIDAMemo {
+	font-family: "Consolas";
+	font-size: 9pt;
+	border: none;
+}
+
+QScrollBar {
+	background-color: #363636;
+	width: 20px;
+	margin: 0 0 0 0;
+}
+
+QScrollBar::sub-line, QScrollBar::add-line {
+	background: none;
+}
+
+/*
+QScrollBar:horizontal {
+	padding: 0 20px 0 20px;
+}
+
+QScrollBar:vertical {
+	padding: 20px 0 20px 0;
+}
+
+QScrollBar::add-line:vertical {
+	image: url(%down-arrow.png%);
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+    height: 20px;
+}
+
+QScrollBar::sub-line:vertical {
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+    height: 20px;
+}
+
+QScrollBar::add-line:horizontal {
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+    width: 20px;
+}
+
+QScrollBar::sub-line:horizontal {
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+    width: 20px;
+}*/
+
+QScrollBar::add-page, QScrollBar::sub-page {
+	background: none;
+}
+
+QScrollBar::handle:vertical {
+	min-height: 20px;
+}
+
+QScrollBar::handle:horizontal {
+	min-width: 20px;
+}
+
+QScrollBar::handle {
+	background-color: #585858;
+	margin: 3px;
+	border-radius: 7px;
+}
+
+QToolBar {
+	border: none;
+}
+
+QPushButton {
+	border: 1px solid #077;
+	text-align: center;
+	min-height: 20px;
+	min-width: 50px;
+	
+	padding: 0 6px 0 6px;
+}
+
+QPushButton:hover {
+	border: 1px solid #0aa;
+}
+
+QPushButton::text {
+	background-color: red;
+}
+
+QComboBox {
+	border: 1px solid #474747;
+}
+
+GraphQObject {
+	background-color: red;
+	padding: 100px;
+}
+
+ChooserContainer {
+	border: 1px solid green;
+	border-radius: 4px;
+}
