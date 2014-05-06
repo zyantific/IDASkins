@@ -4,7 +4,9 @@ IDA Skins
 Plugin providing advanced skinning support for the Qt version of IDA Pro utilizing [Qt stylesheets](http://qt-project.org/doc/qt-4.7/stylesheet.html), similar to CSS.
 
 ## Screenshots
-\- Coming with next commit -
+![Screenshot 1](https://raw.githubusercontent.com/athre0z/ida-skins/master/media/screenshots/screencap1.png)
+
+![Screenshot 2](https://raw.githubusercontent.com/athre0z/ida-skins/master/media/screenshots/screencap2.png)
 
 Screenshots above show the enclosed `stylesheet.css` in combination with the [idaConsonance](https://github.com/eugeneching/ida-consonance) theme.
 
