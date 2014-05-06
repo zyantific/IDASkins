@@ -36,6 +36,7 @@
  */
 bool apply_stylesheet(void)
 {
+	msg("IDASkins 1.0.0 by athre0z/Ende! loaded!\n");
 	QFile stylesheet(QString(idadir(nullptr)) + "\\stylesheet.css");
 	if (!stylesheet.open(QFile::ReadOnly))
 	{
