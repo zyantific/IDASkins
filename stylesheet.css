@@ -23,7 +23,7 @@ QLineEdit {
 }
 
 QLineEdit:hover, QLineEdit:focus {
-	border: 1px solid #00aaaa;	
+	border: 1px solid #00aaaa;
 }
 
 QTabBar::tab {
@@ -47,11 +47,13 @@ QHeaderView::section {
 
 QTableView {
 	border: 1px solid #474747;
-}
-
-QTableView {
 	background-color: #2d2d2d;
 }
+
+QTableCornerButton::section {
+     background: #222;
+     border: 2px outset #222;
+ }
 
 IDAView, hexview_t, CustomIDAMemo {
 	font-family: "Consolas";
@@ -155,3 +157,26 @@ ChooserContainer {
 	border: 1px solid green;
 	border-radius: 4px;
 }
+
+QComboBox > QLineEdit, QComboBox > QLineEdit:hover, QComboBox > QLineEdit:focus {
+	border: none;
+	min-height: default;
+}
+
+QComboBox:hover, QComboBox:focus {
+	border: 1px solid #00aaaa;
+}
+
+/*QComboBox::drop-down {
+     subcontrol-origin: padding;
+     subcontrol-position: top right;
+     width: 15px;
+
+     border-left-width: 1px;
+     border-left-color: #666;
+     border-left-style: solid;
+}
+
+QComboBox::down-arrow {
+	image: backward-icon;
+}*/
