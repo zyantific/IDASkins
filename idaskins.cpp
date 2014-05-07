@@ -36,14 +36,18 @@
  */
 bool apply_stylesheet(void)
 {
-	QFile stylesheet(QString(idadir(nullptr)) + "/skin/stylesheet.css");
+	QString idaDir = QDir(idadir(nullptr)).absolutePath();
+	QFile stylesheet(idaDir + "/skin/stylesheet.css");
 	if (!stylesheet.open(QFile::ReadOnly))
 	{
 		msg("[IDASkins] Unable to load stylesheet file.\n");
 		return false;
 	}
 
-	qApp->setStyleSheet(stylesheet.readAll());
+	QString data = stylesheet.readAll();
+	data.replace("<IDADIR>", idaDir);
+	data.replace("<SKINDIR>", idaDir + "/skin");
+	qApp->setStyleSheet(data);
 	msg("[IDASkins] Skin file successfully applied! "
 		"(Reload using CTRL+SHIFT+S)\n");
 	return true;
