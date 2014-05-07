@@ -36,8 +36,7 @@
  */
 bool apply_stylesheet(void)
 {
-	msg("IDASkins 1.0.0 by athre0z/Ende! loaded!\n");
-	QFile stylesheet(QString(idadir(nullptr)) + "\\stylesheet.css");
+	QFile stylesheet(QString(idadir(nullptr)) + "/skin/stylesheet.css");
 	if (!stylesheet.open(QFile::ReadOnly))
 	{
 		msg("[IDASkins] Unable to load stylesheet file.\n");
@@ -55,6 +54,7 @@ bool apply_stylesheet(void)
 int idaapi init(void)
 {
 	if (!is_idaq()) return PLUGIN_SKIP;
+	msg("IDASkins 1.0.0 by athre0z/Ende! loaded!\n");
 	apply_stylesheet();
 	return PLUGIN_KEEP;
 }
