@@ -1,5 +1,5 @@
 # compile for ida64
-# CONFIG += is64
+#CONFIG += is64
 
 # name of the project
 TARGET = IDASkins

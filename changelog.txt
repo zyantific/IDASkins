@@ -1,0 +1,8 @@
+[Changelog]
+
+1.0.0 -> 1.1.0:
+  - improved overall UI look
+  - fixed problems with bad contrasts
+  - fixed scrollbar issues
+  - moved style config into extra directory (IDADIR/skin)
+  - added path constants "<IDADIR>" and "<SKINDIR>" for stylesheets

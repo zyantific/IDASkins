@@ -3,12 +3,13 @@ IDA Skins
 
 Plugin providing advanced skinning support for the Qt version of IDA Pro utilizing [Qt stylesheets](http://qt-project.org/doc/qt-4.7/stylesheet.html), similar to CSS.
 
-## Screenshots
+## Screenshot
 ![Screenshot 1](https://raw.githubusercontent.com/athre0z/ida-skins/master/media/screenshots/screencap1.png)
 
-![Screenshot 2](https://raw.githubusercontent.com/athre0z/ida-skins/master/media/screenshots/screencap2.png)
+Screenshot above shows the enclosed `stylesheet.css` in combination with the [idaConsonance](https://github.com/eugeneching/ida-consonance) theme.
 
-Screenshots above show the enclosed `stylesheet.css` in combination with the [idaConsonance](https://github.com/eugeneching/ida-consonance) theme.
+## Binary distribution
+[Download latest binary version from github](https://github.com/athre0z/ida-skins/releases/latest)
 
 ## Compliation
 While the Qt makefile supports unix-like operating systems in theory, compilation has not been tested on any platform other than windows. In order to successfully compile the plugin, three environment variables need to be set:
