@@ -1,53 +1,54 @@
 QWidget { 
-	background-color: #363636;
-	color: #ddd;
+    background-color: #363636;
+    color: #ddd;
 }
 
 QCheckBox {
-	background-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
 }
 
 QTextEdit {
-	background-color: #2d2d2d;
-	border: 1px solid #363636;
+    background-color: #2d2d2d;
+    border: 1px solid #363636;
 }
 
 QMenuBar, QMenuBar::item {
-	background-color: #444444;
-	color: #ddd;
+    background-color: #444444;
+    color: #ddd;
 }
 
 QLineEdit {
-	border: 1px solid #474747;
-	min-height: 20px;
+    border: 1px solid #474747;
+    min-height: 20px;
 }
 
 QLineEdit:hover, QLineEdit:focus {
-	border: 1px solid #00aaaa;
+    border: 1px solid #00aaaa;
 }
 
 QTabBar::tab {
-	background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                       stop: 0 #555555, stop: 1 #444444);
 }
 
 QTabBar::tab:selected {
-	background-color: #777777;
+    background-color: #777777;
 }
 
 QTreeView::item {
-	font-size: 8px;
+    font-size: 8px;
 }
 
 QHeaderView::section {
-	background-color: #444;
-	border-left: 3px solid #666;
+    background-color: #444;
+    border-left: 3px solid #666;
 
 }
 
 QTableView {
-	border: 1px solid #474747;
-	background-color: #2d2d2d;
+    border: 1px solid #474747;
+    background-color: #2d2d2d;
+    color: #888;
 }
 
 QTableCornerButton::section {
@@ -56,32 +57,33 @@ QTableCornerButton::section {
  }
 
 IDAView, hexview_t, CustomIDAMemo {
-	font-family: "Consolas";
-	font-size: 9pt;
-	border: none;
+    font-family: "Consolas";
+    font-size: 9pt;
+    border: none;
 }
 
 QScrollBar {
-	background-color: #363636;
-	width: 20px;
-	margin: 0 0 0 0;
+    background-color: #363636;
+    width: 20px;
+    margin: 0 0 0 0;
 }
 
 QScrollBar::sub-line, QScrollBar::add-line {
-	background: none;
+    width: 0;
+    height: 0;
 }
 
 /*
 QScrollBar:horizontal {
-	padding: 0 20px 0 20px;
+    padding: 0 20px 0 20px;
 }
 
 QScrollBar:vertical {
-	padding: 20px 0 20px 0;
+    padding: 20px 0 20px 0;
 }
 
 QScrollBar::add-line:vertical {
-	image: url(%down-arrow.png%);
+    image: url(%down-arrow.png%);
     subcontrol-position: bottom;
     subcontrol-origin: margin;
     height: 20px;
@@ -106,77 +108,90 @@ QScrollBar::sub-line:horizontal {
 }*/
 
 QScrollBar::add-page, QScrollBar::sub-page {
-	background: none;
+    background: none;
 }
 
 QScrollBar::handle:vertical {
-	min-height: 20px;
+    min-height: 20px;
 }
 
 QScrollBar::handle:horizontal {
-	min-width: 20px;
+    min-width: 20px;
 }
 
 QScrollBar::handle {
-	background-color: #585858;
-	margin: 3px;
-	border-radius: 7px;
+    background-color: #585858;
+    margin: 3px;
+    border-radius: 7px;
 }
 
 QToolBar {
-	border: none;
+    border: none;
 }
 
 QPushButton {
-	border: 1px solid #077;
-	text-align: center;
-	min-height: 20px;
-	min-width: 50px;
-	
-	padding: 0 6px 0 6px;
+    border: 1px solid #077;
+    text-align: center;
+    min-height: 20px;
+    min-width: 50px;
+    padding: 0 6px 0 6px;
+    border-radius: 2px;
 }
 
 QPushButton:hover {
-	border: 1px solid #0aa;
+    border: 1px solid #0aa;
 }
 
-QPushButton::text {
-	background-color: red;
+QPushButton:pressed {
+    border: 1px solid #0ee;   
 }
 
 QComboBox {
-	border: 1px solid #474747;
+    border: 1px solid #474747;
 }
 
 GraphQObject {
-	background-color: red;
-	padding: 100px;
+    background-color: red;
+    padding: 100px;
 }
 
 ChooserContainer {
-	border: 1px solid green;
-	border-radius: 4px;
+    border: 1px solid green;
+    border-radius: 4px;
 }
 
 QComboBox > QLineEdit, QComboBox > QLineEdit:hover, QComboBox > QLineEdit:focus {
-	border: none;
-	min-height: default;
+    border: none;
+    min-height: default;
 }
 
 QComboBox:hover, QComboBox:focus {
-	border: 1px solid #00aaaa;
+    border: 1px solid #00aaaa;
 }
 
-/*QComboBox::drop-down {
-     subcontrol-origin: padding;
-     subcontrol-position: top right;
-     width: 15px;
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
 
-     border-left-width: 1px;
-     border-left-color: #666;
-     border-left-style: solid;
+    border-left-width: 1px;
+    border-left-color: #666;
+    border-left-style: solid;
 }
 
 QComboBox::down-arrow {
-	image: backward-icon;
-}*/
+    image: url(<SKINDIR>/icons/expand.png);
+}
+
+QToolBar::handle {
+    image: url(<SKINDIR>/icons/spacer.png);
+}
+
+IDADockWidget > QWidget > QAbstractButton {
+    background-color: #666;
+    border-radius: 3px;
+}
+
+QRadioButton, QLabel, QCheckBox {
+    background: transparent;
+}
