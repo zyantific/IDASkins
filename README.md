@@ -21,7 +21,7 @@ While the Qt makefile supports unix-like operating systems in theory, compilatio
 On windows, you may want to use `make_vs_proj.py` to generate a Visual Studio project file for you.
 
 ## Installation
-After successfully compiling the plugin, place the generated `IDASkins.plX` into the `plugins` directory of your IDA installation. The theme file (`stylesheet.css`) needs to be copied to the root of your IDA installation.
+Place `IDASkins.plX` into the `plugins` directory of your IDA installation. The theme files (the `skin` directory) needs to be copied to the root of your IDA installation.
 
 ## Theming
 Theming IDA using IDASkins works using [Qt stylesheets](http://qt-project.org/doc/qt-4.7/stylesheet.html). For information on the most important IDA-specific UI elements, take a look in the enclosed default `stylesheet.css`.
