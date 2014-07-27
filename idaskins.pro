@@ -1,6 +1,3 @@
-# compile for ida64
-#CONFIG += is64
-
 # name of the project
 TARGET = IDASkins
 
@@ -23,7 +20,12 @@ DEFINES += __IDP__ \
            QPROJECT_LIBRARY
 
 win32 {
-    TARGET_EXT = .plw
+	is64 {
+		TARGET_EXT = .p64
+	}
+	else {
+		TARGET_EXT = .plw
+	}
     DEFINES += __NT__ \
         _CRT_SECURE_NO_WARNINGS \
         __VC__
