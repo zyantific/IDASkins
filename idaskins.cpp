@@ -22,6 +22,10 @@
  * THE SOFTWARE.
  */
 
+#include "Utils.hpp"
+#include "Settings.hpp"
+#include "ThemeSelector.hpp"
+
 #include <QtGui>
 #include <QDockWidget>
 #include <ida.hpp>
@@ -35,11 +39,12 @@
 /**
  * @brief   Applies the Qt stylesheet.
  * @return  true if it succeeds, false if it fails.
+ * @param   themeDir    The directoy of the theme to apply.
  */
-bool apply_stylesheet()
+bool applyStylesheet(QDir themeDir)
 {
-    QString idaDir = QDir(idadir(nullptr)).absolutePath();
-    QFile stylesheet(idaDir + "/skin/stylesheet.css");
+    QString themeDirPath = themeDir.absolutePath();
+    QFile stylesheet(themeDirPath + "/stylesheet.qss");
     if (!stylesheet.open(QFile::ReadOnly))
     {
         msg("[IDASkins] Unable to load stylesheet file.\n");
@@ -47,20 +52,19 @@ bool apply_stylesheet()
     }
 
     QString data = stylesheet.readAll();
-    data.replace("<IDADIR>", idaDir);
-    data.replace("<SKINDIR>", idaDir + "/skin");
+    data.replace("<IDADIR>", idadir(nullptr));
+    data.replace("<SKINDIR>", themeDirPath);
     qApp->setStyleSheet(data);
-    msg("[IDASkins] Skin file successfully applied! "
-        "(Reload using CTRL+SHIFT+S)\n");
+    msg("[IDASkins] Skin file successfully applied!\n");
 
     /*
     static bool first = true;
     // Information gathering
     if (!first)
     {
-        QFile log(idaDir + "/skin/object_log.log");
+        QFile log(themeDir + "/skin/object_log.log");
         log.open(QFile::WriteOnly);
-        std::function<void(QWidget*, int)> helper = [&](QWidget *element, int depth)
+        std::function<void(QObject*, int)> helper = [&](QObject *element, int depth)
         {
             for (int i = 0; i < depth; ++i)
                 log.write("--");
@@ -77,10 +81,8 @@ bool apply_stylesheet()
                 log.write("; icon: ");
                 log.write(((QAbstractButton*)element)->icon().name().toAscii().data());
             }
-            log.write("; stylesheet: ");
-            log.write(element->styleSheet().toAscii().data());
             log.write("\n");
-            auto children = element->findChildren<QWidget*>(QString());
+            auto children = element->children();
             for (auto it = children.begin(); it != children.end(); ++it)
                 helper(*it, depth + 1);
         };
@@ -101,8 +103,12 @@ bool apply_stylesheet()
 int idaapi init()
 {
     if (!is_idaq()) return PLUGIN_SKIP;
-    msg("IDASkins 1.1.0 by athre0z/Ende! loaded!\n");
-    apply_stylesheet();
+    msg("IDASkins 1.2.0 by athre0z/Ende! loaded!\n");
+
+    QDir activeThemeDir;
+    if (Utils::getCurrentThemeDir(activeThemeDir))
+        applyStylesheet(activeThemeDir);
+
     return PLUGIN_KEEP;
 }
 
@@ -119,7 +125,16 @@ void idaapi term()
  */
 void idaapi run(int /*arg*/)
 {
-    apply_stylesheet();
+    ThemeSelector selector;
+    selector.exec();
+
+    // New theme selected? Save to settings.
+    if (selector.selectedThemeDir())
+        Settings().setValue("selectedThemeDir", selector.selectedThemeDir()->dirName());
+
+    QDir activeThemeDir;
+    if (Utils::getCurrentThemeDir(activeThemeDir))
+        applyStylesheet(activeThemeDir);
 }
 
 plugin_t PLUGIN =
@@ -131,7 +146,7 @@ plugin_t PLUGIN =
     run,
     "Advanced IDA skinning",
     "Plugin providing advanced skinning facilities using Qt stylesheets.",
-    "IDASkins: Reload stylesheet",
+    "IDASkins: Settings",
     "Ctrl-Shift-S"
 };
 

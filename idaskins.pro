@@ -13,6 +13,8 @@ QT_NAMESPACE = QT
 # add include path
 INCLUDEPATH += $(IDASDK)/include
 
+QT += xml xmlpatterns
+
 # build settings
 
 DEFINES += __IDP__ \
@@ -126,4 +128,16 @@ unix {
 #
 #--------------------------------------------------------------------------
 
-SOURCES += idaskins.cpp
+HEADERS += ThemeSelector.hpp                \
+           Utils.hpp                        \
+           ThemeManifest.hpp                \
+           Settings.hpp                     \
+
+SOURCES += ThemeSelector.cpp                \
+           Utils.cpp                        \
+           ThemeManifest.cpp                \
+           Settings.cpp                     \
+           idaskins.cpp                     \
+
+FORMS += ui/ThemeEditorDialog.ui            \
+         ui/ThemeSelector.ui                \

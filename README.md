@@ -11,7 +11,7 @@ Screenshot above shows the enclosed `stylesheet.css` in combination with the [id
 ## Binary distribution
 [Download latest binary version from github](https://github.com/athre0z/ida-skins/releases/latest)
 
-## Compliation
+## Compilation
 While the Qt makefile supports unix-like operating systems in theory, compilation has not been tested on any platform other than windows. In order to successfully compile the plugin, three environment variables need to be set:
 
 - `IDADIR` The path of your IDA installation

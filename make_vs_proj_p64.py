@@ -29,7 +29,7 @@ import make_vs_proj
 config = make_vs_proj.config.copy()
 config.update({
     # See make_vs_proj.py for doc
-    'debug_args': config['debug_args'],
+    'debug_args': None,
     'project_file_name': 'idaskins_p64.pro'
 })
 
