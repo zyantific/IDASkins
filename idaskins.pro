@@ -132,6 +132,7 @@ HEADERS += ThemeSelector.hpp                \
            Utils.hpp                        \
            ThemeManifest.hpp                \
            Settings.hpp                     \
+           Config.hpp                       \
 
 SOURCES += ThemeSelector.cpp                \
            Utils.cpp                        \

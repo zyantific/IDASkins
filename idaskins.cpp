@@ -25,6 +25,7 @@
 #include "Utils.hpp"
 #include "Settings.hpp"
 #include "ThemeSelector.hpp"
+#include "Config.hpp"
 
 #include <QtGui>
 #include <QDockWidget>
@@ -47,7 +48,7 @@ bool applyStylesheet(QDir themeDir)
     QFile stylesheet(themeDirPath + "/stylesheet.qss");
     if (!stylesheet.open(QFile::ReadOnly))
     {
-        msg("[IDASkins] Unable to load stylesheet file.\n");
+        msg("["PLUGIN_NAME"] Unable to load stylesheet file.\n");
         return false;
     }
 
@@ -55,14 +56,14 @@ bool applyStylesheet(QDir themeDir)
     data.replace("<IDADIR>", idadir(nullptr));
     data.replace("<SKINDIR>", themeDirPath);
     qApp->setStyleSheet(data);
-    msg("[IDASkins] Skin file successfully applied!\n");
+    msg("["PLUGIN_NAME"] Skin file successfully applied!\n");
 
     /*
     static bool first = true;
     // Information gathering
     if (!first)
     {
-        QFile log(themeDir + "/skin/object_log.log");
+        QFile log(QString(idadir(nullptr)) + "/skin/object_log.log");
         log.open(QFile::WriteOnly);
         std::function<void(QObject*, int)> helper = [&](QObject *element, int depth)
         {
@@ -97,13 +98,51 @@ bool applyStylesheet(QDir themeDir)
 }
 
 /**
+ * @brief   Opens the theme selection dialog.
+ */
+void openThemeSelectionDialog()
+{
+    ThemeSelector selector;
+    selector.exec();
+
+    // New theme selected? Save to settings.
+    if (selector.selectedThemeDir())
+    {
+        Settings().setValue(Settings::kSelectedThemeDir, 
+            selector.selectedThemeDir()->dirName());
+    }
+}
+
+/**
  * @brief   Initialization callback for IDA.
  * @return  A @c PLUGIN_ constant from loader.hpp.
  */
 int idaapi init()
 {
     if (!is_idaq()) return PLUGIN_SKIP;
-    msg("IDASkins 1.2.0 by athre0z/Ende! loaded!\n");
+    msg(PLUGIN_NAME" "PLUGIN_TEXTUAL_VERSION" by athre0z/Ende! loaded!\n");
+
+    // If first start with plugin, ask for theme.
+    Settings settings;
+    QVariant firstStartVar = settings.value(Settings::kFirstStart, true);
+    bool firstStart = true;
+    if (firstStartVar.canConvert<bool>())
+        firstStart = firstStartVar.toBool();
+    else
+        settings.remove(Settings::kFirstStart);
+
+    if (firstStartVar.toBool())
+    {
+        auto pressedButton = QMessageBox::information(nullptr, PLUGIN_NAME": First start",
+            PLUGIN_NAME" detected that this is you first IDA startup with this plugin "
+            "installed. Do you wish to select a theme now?", 
+            QMessageBox::Yes | QMessageBox::No);
+
+        if (pressedButton == QMessageBox::Yes)
+            openThemeSelectionDialog();
+
+        settings.setValue(Settings::kFirstStart, false);
+    }
 
     QDir activeThemeDir;
     if (Utils::getCurrentThemeDir(activeThemeDir))
@@ -125,12 +164,7 @@ void idaapi term()
  */
 void idaapi run(int /*arg*/)
 {
-    ThemeSelector selector;
-    selector.exec();
-
-    // New theme selected? Save to settings.
-    if (selector.selectedThemeDir())
-        Settings().setValue("selectedThemeDir", selector.selectedThemeDir()->dirName());
+    openThemeSelectionDialog();
 
     QDir activeThemeDir;
     if (Utils::getCurrentThemeDir(activeThemeDir))
@@ -146,7 +180,7 @@ plugin_t PLUGIN =
     run,
     "Advanced IDA skinning",
     "Plugin providing advanced skinning facilities using Qt stylesheets.",
-    "IDASkins: Settings",
+    PLUGIN_NAME": Settings",
     "Ctrl-Shift-S"
 };
 

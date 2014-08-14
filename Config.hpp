@@ -22,28 +22,13 @@
  * THE SOFTWARE.
  */
 
-#ifndef SETTINGS_HPP
-#define SETTINGS_HPP
+#ifndef CONFIG_HPP
+#define CONFIG_HPP
 
-#include <QSettings>
+#define MAKE_PLUGIN_VERSION(maj, min, rev)  ((maj << 16) | (min << 8) | rev)
+#define PLUGIN_TEXTUAL_VERSION  "v1.2.0"
+#define PLUGIN_VERSION          MAKE_PLUGIN_VERSION(1, 2, 0)
 
-// ========================================================================= //
-// [Settings]                                                                //
-// ========================================================================= //
-
-class Settings : public QSettings
-{
-public:
-    /**
-     * @brief   Default constructor.
-     */
-    Settings();
-public:
-    // Constants.
-    static const QString kSelectedThemeDir;
-    static const QString kFirstStart;
-};
-
-// ========================================================================= //
+#define PLUGIN_NAME             "IDASkins"
 
 #endif

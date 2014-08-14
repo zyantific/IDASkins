@@ -26,6 +26,7 @@
 
 #include "Utils.hpp"
 #include "ThemeManifest.hpp"
+#include "Config.hpp"
 
 #include <memory>
 #include <QPixmap>
@@ -60,7 +61,7 @@ void ThemeSelector::refresh()
         }
         catch (const ThemeManifest::XInvalidManifest &e) 
         {
-            msg("[IDASkins] %s: %s\n", it->toUtf8().data(), e.what());
+            msg("["PLUGIN_NAME"] %s: %s\n", it->toUtf8().data(), e.what());
         }
     }
 

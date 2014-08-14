@@ -24,12 +24,17 @@
 
 #include "Settings.hpp"
 
+#include "Config.hpp"
+
 // ========================================================================= //
 // [Settings]                                                                //
 // ========================================================================= //
 
+const QString Settings::kSelectedThemeDir = "selectedThemeDir";
+const QString Settings::kFirstStart = "firstStart";
+
 Settings::Settings()
-    : QSettings("athre0z", "IDASkins")
+    : QSettings("athre0z", PLUGIN_NAME)
 {
 
 }

@@ -45,11 +45,11 @@ QString getThemesPath()
 bool getCurrentThemeDir(QDir &dir)
 {
     Settings settings;
-    QVariant themeDirSetting = settings.value("selectedThemeDir");
+    QVariant themeDirSetting = settings.value(Settings::kSelectedThemeDir);
     if (themeDirSetting.isNull()) return false;
     if (!themeDirSetting.canConvert<QString>())
     {
-        settings.remove("selectedThemeDir");
+        settings.remove(Settings::kSelectedThemeDir);
         return false;
     }
 

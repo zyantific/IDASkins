@@ -6,3 +6,8 @@
   - fixed scrollbar issues
   - moved style config into extra directory (IDADIR/skin)
   - added path constants "<IDADIR>" and "<SKINDIR>" for stylesheets
+
+1.1.0 -> 1.2.0:
+  - altered skin file structure to allow switching between several skins
+  - added skin selection dialog
+  - improved default skin

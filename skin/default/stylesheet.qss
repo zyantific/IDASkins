@@ -183,10 +183,6 @@ QComboBox::down-arrow {
     image: url(<SKINDIR>/icons/expand.png);
 }
 
-QToolBar::handle {
-    image: url(<SKINDIR>/icons/spacer.png);
-}
-
 IDADockWidget > QWidget > QAbstractButton {
     background-color: #666;
     border-radius: 3px;
@@ -194,4 +190,11 @@ IDADockWidget > QWidget > QAbstractButton {
 
 QRadioButton, QLabel, QCheckBox {
     background: transparent;
+}
+
+TNavBand > QPushButton, RegJumpButton {
+	min-height: 0;
+	min-width: 0;
+	padding: 0 0 0 0;
+	border: none;
 }
