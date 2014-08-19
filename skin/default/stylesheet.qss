@@ -73,40 +73,6 @@ QScrollBar::sub-line, QScrollBar::add-line {
     height: 0;
 }
 
-/*
-QScrollBar:horizontal {
-    padding: 0 20px 0 20px;
-}
-
-QScrollBar:vertical {
-    padding: 20px 0 20px 0;
-}
-
-QScrollBar::add-line:vertical {
-    image: url(%down-arrow.png%);
-    subcontrol-position: bottom;
-    subcontrol-origin: margin;
-    height: 20px;
-}
-
-QScrollBar::sub-line:vertical {
-    subcontrol-position: top;
-    subcontrol-origin: margin;
-    height: 20px;
-}
-
-QScrollBar::add-line:horizontal {
-    subcontrol-position: right;
-    subcontrol-origin: margin;
-    width: 20px;
-}
-
-QScrollBar::sub-line:horizontal {
-    subcontrol-position: left;
-    subcontrol-origin: margin;
-    width: 20px;
-}*/
-
 QScrollBar::add-page, QScrollBar::sub-page {
     background: none;
 }
