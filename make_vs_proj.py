@@ -32,7 +32,7 @@ config = {
 
     # Arguments passed to the IDA process when debugged.
     # None = no debug configuration is generated.
-    'debug_args': None,
+    'debug_args': '"C:\Users\Ende\Desktop\putty.idb"',
 
     # -------------------------------------------------------------------------
 

@@ -22,12 +22,12 @@ DEFINES += __IDP__ \
            QPROJECT_LIBRARY
 
 win32 {
-	is64 {
-		TARGET_EXT = .p64
-	}
-	else {
-		TARGET_EXT = .plw
-	}
+  is64 {
+    TARGET_EXT = .p64
+  }
+  else {
+    TARGET_EXT = .plw
+  }
     DEFINES += __NT__ \
         _CRT_SECURE_NO_WARNINGS \
         __VC__
@@ -133,12 +133,14 @@ HEADERS += ThemeSelector.hpp                \
            ThemeManifest.hpp                \
            Settings.hpp                     \
            Config.hpp                       \
+           Core.hpp                         \
 
 SOURCES += ThemeSelector.cpp                \
            Utils.cpp                        \
            ThemeManifest.cpp                \
            Settings.cpp                     \
            idaskins.cpp                     \
+           Core.cpp                         \
 
 FORMS += ui/ThemeEditorDialog.ui            \
          ui/ThemeSelector.ui                \

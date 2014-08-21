@@ -80,7 +80,7 @@ void ThemeSelector::themeSelected()
     Q_ASSERT(m_widgets.lwSkinSelection->selectionModel());
     auto selectedIndicies = m_widgets.lwSkinSelection->selectionModel()->selectedIndexes();
     Q_ASSERT(selectedIndicies.count() == 1);
-    Q_ASSERT(selectedIndicies.first().row() < m_curThemeList.count());
+    Q_ASSERT(selectedIndicies.first().row() < m_curThemeList->size());
     const auto &entry = m_curThemeList->at(selectedIndicies.first().row());
 
     m_widgets.lblAuthorVal->setText(entry.second->themeAuthor());
@@ -109,7 +109,7 @@ void ThemeSelector::updatePreview()
     }
 }
 
-void ThemeSelector::resizeEvent(QResizeEvent * event)
+void ThemeSelector::resizeEvent(QResizeEvent *event)
 {
     this->QDialog::resizeEvent(event);
     updatePreview();

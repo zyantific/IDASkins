@@ -24,8 +24,9 @@
 
 #include "Utils.hpp"
 #include "Settings.hpp"
-#include "ThemeSelector.hpp"
+
 #include "Config.hpp"
+#include "Core.hpp"
 
 #include <QtGui>
 #include <QDockWidget>
@@ -38,82 +39,6 @@
 // ============================================================================
 
 /**
- * @brief   Applies the Qt stylesheet.
- * @return  true if it succeeds, false if it fails.
- * @param   themeDir    The directoy of the theme to apply.
- */
-bool applyStylesheet(QDir themeDir)
-{
-    QString themeDirPath = themeDir.absolutePath();
-    QFile stylesheet(themeDirPath + "/stylesheet.qss");
-    if (!stylesheet.open(QFile::ReadOnly))
-    {
-        msg("["PLUGIN_NAME"] Unable to load stylesheet file.\n");
-        return false;
-    }
-
-    QString data = stylesheet.readAll();
-    data.replace("<IDADIR>", idadir(nullptr));
-    data.replace("<SKINDIR>", themeDirPath);
-    qApp->setStyleSheet(data);
-    msg("["PLUGIN_NAME"] Skin file successfully applied!\n");
-
-    /*
-    static bool first = true;
-    // Information gathering
-    if (!first)
-    {
-        QFile log(QString(idadir(nullptr)) + "/skin/object_log.log");
-        log.open(QFile::WriteOnly);
-        std::function<void(QObject*, int)> helper = [&](QObject *element, int depth)
-        {
-            for (int i = 0; i < depth; ++i)
-                log.write("--");
-            log.write(element->metaObject()->className());
-            log.write(" name: ");
-            log.write(element->objectName().toAscii().data());
-            if (strcmp(element->metaObject()->className(), "QLabel") == 0)
-            {
-                log.write("; text: ");
-                log.write(((QLabel*)element)->text().toAscii().data());
-            }
-            if (strcmp(element->metaObject()->className(), "QAbstractButton") == 0)
-            {
-                log.write("; icon: ");
-                log.write(((QAbstractButton*)element)->icon().name().toAscii().data());
-            }
-            log.write("\n");
-            auto children = element->children();
-            for (auto it = children.begin(); it != children.end(); ++it)
-                helper(*it, depth + 1);
-        };
-        helper(qApp->activeWindow(), 0);
-        log.flush();
-        log.close();
-    }
-    first = false;
-    */
-
-    return true;
-}
-
-/**
- * @brief   Opens the theme selection dialog.
- */
-void openThemeSelectionDialog()
-{
-    ThemeSelector selector;
-    selector.exec();
-
-    // New theme selected? Save to settings.
-    if (selector.selectedThemeDir())
-    {
-        Settings().setValue(Settings::kSelectedThemeDir, 
-            selector.selectedThemeDir()->dirName());
-    }
-}
-
-/**
  * @brief   Initialization callback for IDA.
  * @return  A @c PLUGIN_ constant from loader.hpp.
  */
@@ -122,41 +47,17 @@ int idaapi init()
     if (!is_idaq()) return PLUGIN_SKIP;
     msg(PLUGIN_NAME" "PLUGIN_TEXTUAL_VERSION" by athre0z/Ende! loaded!\n");
 
-    // If first start with plugin, ask for theme.
-    Settings settings;
-    QVariant firstStartVar = settings.value(Settings::kFirstStart, true);
-    bool firstStart = true;
-    if (firstStartVar.canConvert<bool>())
-        firstStart = firstStartVar.toBool();
-    else
-        settings.remove(Settings::kFirstStart);
-
-    if (firstStartVar.toBool())
+    try
     {
-        auto pressedButton = QMessageBox::information(nullptr, PLUGIN_NAME": First start",
-            PLUGIN_NAME" detected that this is you first IDA startup with this plugin "
-            "installed. Do you wish to select a theme now?", 
-            QMessageBox::Yes | QMessageBox::No);
-
-        if (pressedButton == QMessageBox::Yes)
-            openThemeSelectionDialog();
-
-        settings.setValue(Settings::kFirstStart, false);
+        Core::instance();
+    }
+    catch (const std::runtime_error &e)
+    {
+        msg("["PLUGIN_NAME"][ERROR] Cannot load plugin: %s\n", e.what());
+        return PLUGIN_UNL;
     }
 
-    QDir activeThemeDir;
-    if (Utils::getCurrentThemeDir(activeThemeDir))
-        applyStylesheet(activeThemeDir);
-
     return PLUGIN_KEEP;
-}
-
-/**
- * @brief   Shutdown callback for IDA.
- */
-void idaapi term()
-{
-    
 }
 
 /**
@@ -164,11 +65,16 @@ void idaapi term()
  */
 void idaapi run(int /*arg*/)
 {
-    openThemeSelectionDialog();
+    Core::instance().runPlugin();
+}
 
-    QDir activeThemeDir;
-    if (Utils::getCurrentThemeDir(activeThemeDir))
-        applyStylesheet(activeThemeDir);
+/**
+ * @brief   Shutdown callback for IDA.
+ */
+void idaapi term()
+{
+    if (Core::isInstantiated())
+        Core::freeInstance();
 }
 
 plugin_t PLUGIN =
