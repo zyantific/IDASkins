@@ -57,7 +57,8 @@ void ThemeSelector::refresh()
         {
             QDir curThemeDir = themesDir.absolutePath() + "/" + *it;
             themes->emplace_back(std::make_pair(
-                curThemeDir, new ThemeManifest(curThemeDir.absolutePath() + "/manifest.xml")));
+                curThemeDir, std::move(std::unique_ptr<ThemeManifest>(
+                new ThemeManifest(curThemeDir.absolutePath() + "/manifest.xml")))));
         }
         catch (const ThemeManifest::XInvalidManifest &e) 
         {
