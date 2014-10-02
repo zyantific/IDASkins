@@ -57,10 +57,31 @@ QTableCornerButton::section {
  }
 
 IDAView, hexview_t, CustomIDAMemo {
-    font-family: "Consolas";
-    font-size: 9pt;
-    border: none;
+	border: none;
 }
+
+CustomIDAMemo {
+    font-family: "<TEXT_INPUT_FONT_FAMILY>";
+    font-size: <TEXT_INPUT_FONT_SIZE>;
+    font-style: <TEXT_INPUT_FONT_STYLE>;
+    font-weight: <TEXT_INPUT_FONT_WEIGHT>;
+}
+
+IDAView {
+    font-family: "<DISASSEMBLY_FONT_FAMILY>";
+    font-size: <DISASSEMBLY_FONT_SIZE>;
+    font-style: <DISASSEMBLY_FONT_STYLE>;
+    font-weight: <DISASSEMBLY_FONT_WEIGHT>;
+}
+
+hexview_t {
+    font-family: "<HEXVIEW_FONT_FAMILY>";
+    font-size: <HEXVIEW_FONT_SIZE>;
+    font-style: <HEXVIEW_FONT_STYLE>;
+    font-weight: <HEXVIEW_FONT_WEIGHT>;
+}
+
+/* TODO: DEBUG_REGISTERS, OUTPUT_WINDOW */
 
 QScrollBar {
     background-color: #363636;

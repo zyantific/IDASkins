@@ -27,19 +27,22 @@
 #include "Config.hpp"
 #include "ThemeSelector.hpp"
 #include "Settings.hpp"
+#include "IdaFontConfig.hpp"
 
 #include <QDir>
 #include <QApplication>
 #include <QMessageBox>
-#include <ida.hpp>
 #include <idp.hpp>
 #include <diskio.hpp>
+#include <kernwin.hpp>
+#include <loader.hpp>
 
 // ========================================================================= //
 // [Core]                                                                    //
 // ========================================================================= //
 
 Core::Core()
+    : m_lastUiActionWasFontChange(false)
 {
     // If first start with plugin, ask for theme.
     Settings settings;
@@ -64,23 +67,21 @@ Core::Core()
         settings.setValue(Settings::kFirstStart, false);
     }
 
-    QDir activeThemeDir;
-    if (Utils::getCurrentThemeDir(activeThemeDir))
-        applyStylesheet(activeThemeDir);
+    applyStylesheetFromSettings();
+
+    hook_to_notification_point(HT_UI, &uiHook, this);
 }
 
 Core::~Core()
 {
-
+    unhook_from_notification_point(HT_UI, &uiHook, this);
 }
 
 void Core::runPlugin()
 {
     openThemeSelectionDialog();
 
-    QDir activeThemeDir;
-    if (Utils::getCurrentThemeDir(activeThemeDir))
-        applyStylesheet(activeThemeDir);
+    applyStylesheetFromSettings();
 }
 
 bool Core::applyStylesheet(QDir &themeDir)
@@ -94,9 +95,9 @@ bool Core::applyStylesheet(QDir &themeDir)
     }
 
     QString data = stylesheet.readAll();
-    data.replace("<IDADIR>", idadir(nullptr));
-    data.replace("<SKINDIR>", themeDirPath);
+    preprocessStylesheet(data, themeDirPath);
     qApp->setStyleSheet(data);
+    request_refresh(IWID_ALL);
     msg("["PLUGIN_NAME"] Skin file successfully applied!\n");
 
     /*
@@ -136,6 +137,70 @@ bool Core::applyStylesheet(QDir &themeDir)
     */
 
     return true;
+}
+
+bool Core::applyStylesheetFromSettings()
+{
+    QDir activeThemeDir;
+    if (Utils::getCurrentThemeDir(activeThemeDir))
+        return applyStylesheet(activeThemeDir);
+    return false;
+}
+
+void Core::preprocessStylesheet(QString &qss, const QString &themeDirPath)
+{
+    qss.replace("<IDADIR>", idadir(nullptr));
+    qss.replace("<SKINDIR>", themeDirPath);
+
+    auto applyFontReplacements = [&](const QString &keyword, IdaFontConfig::FontType type)
+    {
+        IdaFontConfig settings(type);
+        QString prefix = "<" + keyword + "_FONT_";
+
+        qss.replace(prefix + "FAMILY>", settings.family());
+        qss.replace(prefix + "STYLE>", settings.italic() ? " italic" : "");
+        qss.replace(prefix + "WEIGHT>", settings.bold() ? " bold" : "");
+        qss.replace(prefix + "SIZE>", QString::number(settings.size()) + "pt");
+    };
+
+    applyFontReplacements("DISASSEMBLY",     IdaFontConfig::FONT_DISASSEMBLY);
+    applyFontReplacements("HEXVIEW",         IdaFontConfig::FONT_HEXVIEW);
+    applyFontReplacements("DEBUG_REGISTERS", IdaFontConfig::FONT_DEBUG_REGISTERS);
+    applyFontReplacements("TEXT_INPUT",      IdaFontConfig::FONT_TEXT_INPUT);
+    applyFontReplacements("OUTPUT_WINDOW",   IdaFontConfig::FONT_OUTPUT_WINDOW);
+
+    //msg("%s\n", qss.toAscii().data());
+}
+
+int Core::uiHook(void *userData, int notificationCode, va_list va)
+{
+    auto thiz = static_cast<Core*>(userData);
+    Q_ASSERT(thiz);
+
+    switch (notificationCode)
+    {
+        case ui_preprocess:
+        {
+            const char *action = va_arg(va, const char*);
+            if (::qstrcmp(action, "SetFont") == 0)
+                thiz->m_lastUiActionWasFontChange = true;
+        } break;
+
+        case ui_postprocess:
+        {
+            if (thiz->m_lastUiActionWasFontChange)
+            {
+                QMessageBox::warning(qApp->activeWindow(), "IDASkins",
+                    "Please note that altering the font settings when IDASkins is loaded "
+                    "may cause strange effects on font rendering. It is recommended to "
+                    "restart IDA after making font-related changes in the settings to avoid "
+                    "instability.");
+                thiz->m_lastUiActionWasFontChange = false;
+            }
+        } break;
+    }
+
+    return 0;
 }
 
 void Core::openThemeSelectionDialog()

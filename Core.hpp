@@ -28,6 +28,7 @@
 #include "Utils.hpp"
 
 #include <QObject>
+#include <ida.hpp>
 
 // ========================================================================= //
 // [Core]                                                                    //
@@ -39,6 +40,8 @@
 class Core : public QObject, public Utils::Singleton<Core>
 {
     Q_OBJECT
+
+    bool m_lastUiActionWasFontChange;
 public:
     /**
      * @brief   Default constructor.
@@ -63,6 +66,29 @@ protected:
      * @param   themeDir    The directoy of the theme to apply.
      */
     bool applyStylesheet(QDir &themeDir);
+    /**
+     * @brief   Convenience wrapper around @c applyStylesheet.
+     * @return  true if it succeeds, false if it fails.
+     *          
+     * Applies theme specified in the settings.
+     */
+    bool applyStylesheetFromSettings();
+    /**
+     * @brief   Preprocess stylesheet.
+     * @param   qss             The stylesheet contents.
+     * @param   themeDirPath    Pathname of the theme directory.
+     *                          
+     * Replaces IDASkins constants with their value.
+     */
+    void preprocessStylesheet(QString &qss, const QString &themeDirPath);
+    /**
+     * @brief   IDA user interface event hook.
+     * @param   userData            This pointer.
+     * @param   notificationCode    The notification code.
+     * @param   va                  The variable arguments.
+     * @return  Always 0.
+     */
+    static int idaapi uiHook(void *userData, int notificationCode, va_list va);
 protected slots:
     /**
      * @brief   Signal emitted when a theme selection was accepted in

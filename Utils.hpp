@@ -29,7 +29,7 @@
 #include <QDir>
 
 namespace Utils
-{;
+{
 
 // ========================================================================= //
 // IDASkins related functions                                                //

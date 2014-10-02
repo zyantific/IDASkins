@@ -134,6 +134,7 @@ HEADERS += ThemeSelector.hpp                \
            Settings.hpp                     \
            Config.hpp                       \
            Core.hpp                         \
+           IdaFontConfig.hpp                \
 
 SOURCES += ThemeSelector.cpp                \
            Utils.cpp                        \
@@ -141,6 +142,7 @@ SOURCES += ThemeSelector.cpp                \
            Settings.cpp                     \
            idaskins.cpp                     \
            Core.cpp                         \
+           IdaFontConfig.cpp                \
 
 FORMS += ui/ThemeEditorDialog.ui            \
          ui/ThemeSelector.ui                \

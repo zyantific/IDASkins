@@ -22,29 +22,67 @@
  * THE SOFTWARE.
  */
 
-#ifndef SETTINGS_HPP
-#define SETTINGS_HPP
-
-#include <QSettings>
+#include "IdaFontConfig.hpp"
 
 // ========================================================================= //
-// [Settings]                                                                //
+// [IdaFontConfig]                                                           //
 // ========================================================================= //
 
-class Settings : public QSettings
+IdaFontConfig::IdaFontConfig(FontType type)
+    : QSettings("Hex-Rays", "IDA")
+    , m_type(type)
 {
-public:
-    /**
-     * @brief   Default constructor.
-     */
-    Settings();
-    virtual ~Settings();
-public:
-    // Constants.
-    static const QString kSelectedThemeDir;
-    static const QString kFirstStart;
-};
+
+}
+
+QString IdaFontConfig::family()
+{
+    return getSetting<QString>("Name");
+}
+
+quint32 IdaFontConfig::size()
+{
+    return getSetting<quint32>("Size");
+}
+
+bool IdaFontConfig::bold()
+{
+    return getSetting<bool>("Bold");
+}
+
+bool IdaFontConfig::italic()
+{
+    return getSetting<bool>("Italic");
+}
+
+//QString IdaFontConfig::style()
+//{
+//
+//}
+
+char const* IdaFontConfig::typeToSettingsKey(FontType type)
+{
+    switch (type)
+    {
+        case FONT_DISASSEMBLY: 
+            return "Disassembly";
+        case FONT_HEXVIEW:
+            return "Hex view";
+        case FONT_DEBUG_REGISTERS:
+            return "Debug registers";
+        case FONT_TEXT_INPUT:
+            return "Text input";
+        case FONT_OUTPUT_WINDOW:
+            return "Output window";
+    }
+
+    Q_ASSERT(false);
+    return nullptr;
+}
+
+IdaFontConfig::~IdaFontConfig()
+{
+
+}
 
 // ========================================================================= //
-
-#endif

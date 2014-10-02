@@ -22,28 +22,70 @@
  * THE SOFTWARE.
  */
 
-#ifndef SETTINGS_HPP
-#define SETTINGS_HPP
+#ifndef IDAFONTCONFIG_HPP
+#define IDAFONTCONFIG_HPP
 
 #include <QSettings>
+#include <pro.h>
 
 // ========================================================================= //
-// [Settings]                                                                //
+// [IdaFontConfig]                                                           //
 // ========================================================================= //
 
-class Settings : public QSettings
+class IdaFontConfig : private QSettings
 {
+public:
+    enum FontType
+    {
+        FONT_DISASSEMBLY,
+        FONT_HEXVIEW,
+        FONT_DEBUG_REGISTERS,
+        FONT_TEXT_INPUT,
+        FONT_OUTPUT_WINDOW
+    };
 public:
     /**
      * @brief   Default constructor.
      */
-    Settings();
-    virtual ~Settings();
+    explicit IdaFontConfig(FontType type);
+    /**
+     * @brief   Destructor.
+     */
+    virtual ~IdaFontConfig();
 public:
-    // Constants.
-    static const QString kSelectedThemeDir;
-    static const QString kFirstStart;
+    QString family();
+    quint32 size  ();
+    bool    bold  ();
+    bool    italic();
+    //QString style ();
+protected:
+    template<typename T>
+    T getSetting(const QString &key);
+    static const char *typeToSettingsKey(FontType type);
+protected:
+    FontType m_type;
 };
+
+// ========================================================================= //
+// Implementation of inline functions [IdaFontConfig]                        //
+// ========================================================================= //
+
+template <typename T> inline
+T IdaFontConfig::getSetting(const QString &key)
+{
+    beginGroup("Font");
+#   if IDA_SDK_VERSION >= 640
+        beginGroup(typeToSettingsKey(m_type));
+#   endif
+
+    T tmp = value(key).value<T>();
+
+#   if IDA_SDK_VERSION >= 640
+        endGroup();
+#   endif
+    endGroup();
+    return tmp;
+}
 
 // ========================================================================= //
 
