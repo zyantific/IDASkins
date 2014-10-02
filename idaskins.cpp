@@ -80,12 +80,12 @@ void idaapi term()
 plugin_t PLUGIN =
 {
     IDP_INTERFACE_VERSION,
-    0,
-    init,
-    term,
-    run,
+    PLUGIN_FIX,
+    &init,
+    &term,
+    &run,
     "Advanced IDA skinning",
-    "Plugin providing advanced skinning facilities using Qt stylesheets.",
+    "Plugin providing advanced skinning features using Qt stylesheets.",
     PLUGIN_NAME": Settings",
     "Ctrl-Shift-S"
 };

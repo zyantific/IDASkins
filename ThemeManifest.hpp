@@ -37,6 +37,7 @@ class ThemeManifest
     QString m_themeAuthor;
     QString m_themeVersion;
     QString m_themePreviewImage;
+    QString m_themeNotes;
 public:
     ThemeManifest() {}
     ThemeManifest(const QString &manifestFilePath);
@@ -46,6 +47,7 @@ public:
         XInvalidManifest(const char *what) : std::runtime_error(what) {}
     };
 public:
+    // NOTE: setters not required, yet. 
     const QString& themeName() const                { return m_themeName;           }
     void setThemeName(const QString &themeName)     { m_themeName = themeName;      }
     const QString& themeAuthor() const              { return m_themeAuthor;         }
@@ -54,6 +56,8 @@ public:
     void setThemeVersion(const QString &version)    { m_themeVersion = version;     }
     const QString& themePreviewImage() const        { return m_themePreviewImage;   }
     void setThemePreviewImage(const QString &image) { m_themePreviewImage = image;  }
+    const QString& themeNotes() const               { return m_themeNotes;          }
+    void setThemeNotes(const QString &notes)        { m_themeNotes = notes;         }
 public:
     /**
      * @brief   Parses a given manifest file.

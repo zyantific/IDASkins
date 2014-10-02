@@ -85,6 +85,7 @@ void ThemeSelector::themeSelected()
 
     m_widgets.lblAuthorVal->setText(entry.second->themeAuthor());
     m_widgets.lblVersionVal->setText(entry.second->themeVersion());
+    m_widgets.lblNotesVal->setText(entry.second->themeNotes());
 
     if (!entry.second->themePreviewImage().isEmpty())
     {
@@ -92,7 +93,8 @@ void ThemeSelector::themeSelected()
             = QPixmap(entry.first.absolutePath() + "/" + entry.second->themePreviewImage());
     }
     else
-        m_curPreviewImage = NULL;
+        m_curPreviewImage = nullptr;
+
     updatePreview();
 }
 

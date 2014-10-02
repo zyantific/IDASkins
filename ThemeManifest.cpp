@@ -65,6 +65,11 @@ void ThemeManifest::parseFile(const QString &manifestFilePath)
                 m_themePreviewImage = attrs.value("preview_image").toString();
             else
                 m_themePreviewImage.clear();
+
+            if (attrs.hasAttribute("notes"))
+                m_themeNotes = attrs.value("notes").toString();
+            else
+                m_themeNotes.clear();
         }
     }
 

@@ -52,7 +52,8 @@ Core::Core()
 
     if (firstStartVar.toBool())
     {
-        auto pressedButton = QMessageBox::information(nullptr, PLUGIN_NAME": First start",
+        auto pressedButton = QMessageBox::information(qApp->activeWindow(), 
+            PLUGIN_NAME": First start",
             PLUGIN_NAME" detected that this is you first IDA startup with this plugin "
             "installed. Do you wish to select a theme now?", 
             QMessageBox::Yes | QMessageBox::No);
@@ -139,7 +140,7 @@ bool Core::applyStylesheet(QDir &themeDir)
 
 void Core::openThemeSelectionDialog()
 {
-    ThemeSelector selector;
+    ThemeSelector selector(qApp->activeWindow());
     connect(&selector, SIGNAL(accepted()), SLOT(onThemeSelectionAccepted()));
     selector.exec();
 }
