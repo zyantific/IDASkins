@@ -59,6 +59,9 @@ mac { # scope name must be 'mac'
       QMAKE_LFLAGS_RELEASE += -m32
     }
 }
+*-g++* {
+    QMAKE_CXXFLAGS += -std=c++11
+}
 
 CONFIG(debug, debug|release) {
   DEFINES += _DEBUG
@@ -99,7 +102,12 @@ linux:LIBS += -z \
 
 # add library directory
 LIBDIR = $$(IDASDK)/lib/$${SYSDIR}/
-LIBS += -L"$${LIBDIR}" -lida
+*-g++* {
+    LIBS += -L"$${LIBDIR}"
+}
+else {
+    LIBS += -L"$${LIBDIR}" -lida
+}
 
 # set all build directories
 MOC_DIR = $${OBJDIR}
