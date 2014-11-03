@@ -126,7 +126,7 @@ QPushButton {
     border-radius: 2px;
 }
 
-QPushButton:hover {
+QPushButton:hover, QPushButton:default {
     border: 1px solid #0aa;
 }
 
