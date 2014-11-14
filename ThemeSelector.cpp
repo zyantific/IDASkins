@@ -81,7 +81,7 @@ void ThemeSelector::themeSelected()
     Q_ASSERT(m_widgets.lwSkinSelection->selectionModel());
     auto selectedIndicies = m_widgets.lwSkinSelection->selectionModel()->selectedIndexes();
     Q_ASSERT(selectedIndicies.count() == 1);
-    Q_ASSERT(selectedIndicies.first().row() < m_curThemeList->size());
+    Q_ASSERT(static_cast<std::size_t>(selectedIndicies.first().row()) < m_curThemeList->size());
     const auto &entry = m_curThemeList->at(selectedIndicies.first().row());
 
     m_widgets.lblAuthorVal->setText(entry.second->themeAuthor());
