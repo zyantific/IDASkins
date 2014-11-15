@@ -45,7 +45,7 @@
 int idaapi init()
 {
     if (!is_idaq()) return PLUGIN_SKIP;
-    msg("["PLUGIN_NAME"] "PLUGIN_TEXTUAL_VERSION" by athre0z/Ende! loaded!\n");
+    msg("[" PLUGIN_NAME "] " PLUGIN_TEXTUAL_VERSION " by athre0z/Ende! loaded!\n");
 
     try
     {
@@ -53,7 +53,7 @@ int idaapi init()
     }
     catch (const std::runtime_error &e)
     {
-        msg("["PLUGIN_NAME"][ERROR] Cannot load plugin: %s\n", e.what());
+        msg("[" PLUGIN_NAME "][ERROR] Cannot load plugin: %s\n", e.what());
         return PLUGIN_UNL;
     }
 
@@ -86,7 +86,7 @@ plugin_t PLUGIN =
     &run,
     "Advanced IDA skinning",
     "Plugin providing advanced skinning features using Qt stylesheets.",
-    PLUGIN_NAME": Settings",
+    PLUGIN_NAME ": Settings",
     "Ctrl-Shift-S"
 };
 

@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 """
+    This script build the binary distribution for the Windows version of IDA
+    PRO for multiple IDA versions in one batch.
+
     The MIT License (MIT)
 
     Copyright (c) 2014 athre0z
@@ -84,8 +87,9 @@ if __name__ == '__main__':
                 '-Dida_sdk=' + os.path.join(args.ida_sdks_path, 'idasdk{}{}'.format(*cur_target)),
                 '-G', 'Visual Studio 10',
                 '-DCMAKE_INSTALL_PREFIX:PATH=../dist/IDA-{}.{}'.format(*cur_target),
-                ] + args.cmake_args.split(' ') + ['..'] 
-                + (['-DIDA_ARCH_64=TRUE'] if arch == 64 else []), cwd=build_dir)
+                ] + args.cmake_args.split(' ') + ['..'] + (
+                    ['-DIDA_ARCH_64=TRUE'] if arch == 64 else []
+                ), cwd=build_dir)
             if proc.wait() != 0:
                 print('[-] CMake failed, giving up.')
                 exit()

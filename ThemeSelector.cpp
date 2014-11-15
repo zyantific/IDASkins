@@ -62,7 +62,7 @@ void ThemeSelector::refresh()
         }
         catch (const ThemeManifest::XInvalidManifest &e) 
         {
-            msg("["PLUGIN_NAME"] %s: %s\n", it->toUtf8().data(), e.what());
+            msg("[" PLUGIN_NAME "] %s: %s\n", it->toUtf8().data(), e.what());
         }
     }
 

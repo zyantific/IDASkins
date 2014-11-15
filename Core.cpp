@@ -90,7 +90,7 @@ bool Core::applyStylesheet(QDir &themeDir)
     QFile stylesheet(themeDirPath + "/stylesheet.qss");
     if (!stylesheet.open(QFile::ReadOnly))
     {
-        msg("["PLUGIN_NAME"] Unable to load stylesheet file.\n");
+        msg("[" PLUGIN_NAME "] Unable to load stylesheet file.\n");
         return false;
     }
 
@@ -98,7 +98,7 @@ bool Core::applyStylesheet(QDir &themeDir)
     preprocessStylesheet(data, themeDirPath);
     qApp->setStyleSheet(data);
     request_refresh(IWID_ALL);
-    msg("["PLUGIN_NAME"] Skin file successfully applied!\n");
+    msg("[" PLUGIN_NAME "] Skin file successfully applied!\n");
 
     /*
     static bool first = true;

@@ -22,7 +22,7 @@
 # THE SOFTWARE.
 #
 
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 2.8.12)
 
 project(IDASkins)
 
@@ -35,7 +35,7 @@ if (NOT CONFIGURED_ONCE)
     # Compiler specific switches
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
             "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        set(compiler_specific "-m32 -std=c++0x -O2 -Werror")
+        set(compiler_specific "-m32 -std=c++0x -Werror")
         set(ida_lib_path_compiler "gcc")
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         set(compiler_specific "/WX /wd4996 /MP /D__VC__")
@@ -68,9 +68,9 @@ if (NOT CONFIGURED_ONCE)
         else()
             set(plugin_extension ".plw")
         endif()
-    elseif (UNIX) # Untested!
-        set(os_specific "-D__LINUX__=1")
-        set(ida_lib_path_platform "mac")
+    elseif (UNIX)
+        set(os_specific "-D__LINUX__")
+        set(ida_lib_path_platform "linux")
 
         if (IDA_ARCH_64)
             message(SEND_ERROR "FIXME: What is the file extension here?")
@@ -78,8 +78,8 @@ if (NOT CONFIGURED_ONCE)
             set(plugin_extension ".plx")
         endif()
     elseif (APPLE) # Untested!
-        set(os_specific "-D__MAC__=1 -D_FORTIFY_SOURCE=0")
-        set(ida_lib_path_platform "linux")
+        set(os_specific "-D__MAC__ -D_FORTIFY_SOURCE=0")
+        set(ida_lib_path_platform "mac")
 
         if (IDA_ARCH_64)
             message(SEND_ERROR "FIXME: What is the file extension here?")
@@ -123,6 +123,7 @@ if (NOT CONFIGURED_ONCE)
 
     set(IDA_LIB_DIR "${ida_sdk}/lib/x86_${ida_lib_path_platform}_${ida_lib_path_compiler}_${ida_lib_path_arch}"
         CACHE PATH "IDA SDK library path" FORCE)
+    message(STATUS "IDA library path: ${IDA_LIB_DIR}")
     if (NOT EXISTS ${IDA_LIB_DIR})
         set(IDA_LIB_DIR, NOTFOUND)
     endif()
@@ -161,7 +162,18 @@ foreach(cur_var ${all_vars})
 endforeach()
 
 # Other dependencies
-find_library(ida_libraries NAMES ida PATHS ${IDA_LIB_DIR} REQUIRED)
+if (WIN32)
+    find_library(ida_ida_library NAMES "ida" PATHS ${IDA_LIB_DIR} REQUIRED)
+    list(APPEND ida_libraries ${ida_ida_library})
+    find_library(ida_pro_library NAMES "pro" PATHS ${IDA_LIB_DIR})
+    if (ida_pro_library)
+        list(APPEND ida_libraries ${ida_pro_library})
+    endif ()
+elseif (UNIX OR APPLE)
+    # We hardwire the path here as the lib lacks the "lib" prefix, making
+    # find_library ignoring it.
+    list(APPEND ida_pro_library "${IDA_LIB_DIR}/pro.a")
+endif ()
 include_directories("${ida_sdk}/include")
 
 # Build target
@@ -171,6 +183,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
     ${project_forms_headers})
 #    ${project_resources_rcc})
 set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
+    PREFIX ""
     SUFFIX "${plugin_extension}"
     OUTPUT_NAME ${CMAKE_PROJECT_NAME})
 target_link_libraries(${CMAKE_PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
