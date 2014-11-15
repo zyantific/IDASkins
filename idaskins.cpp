@@ -45,7 +45,7 @@
 int idaapi init()
 {
     if (!is_idaq()) return PLUGIN_SKIP;
-    msg("[" PLUGIN_NAME "] " PLUGIN_TEXTUAL_VERSION " by athre0z/Ende! loaded!\n");
+    msg("[" PLUGIN_NAME "] " PLUGIN_TEXTUAL_VERSION " by athre0z loaded!\n");
 
     try
     {
