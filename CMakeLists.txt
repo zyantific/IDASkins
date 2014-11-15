@@ -27,7 +27,9 @@ cmake_minimum_required(VERSION 3.1.0)
 project(IDASkins)
 
 option(IDA_ARCH_64 "Build plugin for 64 bit IDA" False)
-set(ida_sdk $ENV{IDASDK})
+if (NOT DEFINED ida_sdk)
+    set(ida_sdk $ENV{IDASDK})
+endif ()
 
 if (NOT CONFIGURED_ONCE)
     # Compiler specific switches
@@ -38,11 +40,6 @@ if (NOT CONFIGURED_ONCE)
     elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         set(compiler_specific "/WX /wd4996 /MP /D__VC__")
         set(ida_lib_path_compiler "vc")
-
-        # When generating for Visual Studio, 
-        # generate user file for convenient debugging support.
-        configure_file("template.vcxproj.user" 
-            "${CMAKE_PROJECT_NAME}.vcxproj.user" @ONLY)
 
         # Hack for MSVC to always use /MD, even when generating debug code
         set(manipulated_vars
@@ -182,11 +179,16 @@ target_link_libraries(${CMAKE_PROJECT_NAME} ${ida_libraries})
 # Define install rules
 file(TO_CMAKE_PATH "$ENV{IDADIR}" ida_dir)
 if (ida_dir)
-    set(CMAKE_INSTALL_PREFIX "${ida_dir}")
-    if (WIN32)
+    set(CMAKE_INSTALL_PREFIX "${ida_dir}" CACHE STRING "")
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         file(TO_NATIVE_PATH "${ida_dir}" IDA_NATIVE_DIR)
+
+        # When generating for Visual Studio, 
+        # generate user file for convenient debugging support.
+        configure_file("template.vcxproj.user" "${CMAKE_PROJECT_NAME}.vcxproj.user" @ONLY)
     endif ()
 endif ()
 install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION plugins)
+install(DIRECTORY skin/ DESTINATION skin)
 
 set(CONFIGURED_ONCE TRUE CACHE INTERNAL "CMake has configured at least once.")
