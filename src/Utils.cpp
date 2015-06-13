@@ -30,7 +30,7 @@
 #include <diskio.hpp>
 
 namespace Utils
-{;
+{
 
 QDir getThemesDir()
 {

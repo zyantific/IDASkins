@@ -138,13 +138,6 @@ if (ida_dir)
 
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         file(TO_NATIVE_PATH ${ida_dir} IDA_NATIVE_DIR)
-
-        # When generating for Visual Studio, 
-        # generate user file for convenient debugging support.
-        configure_file(
-            "cmake/template.vcxproj.user" 
-            "${plugin_name}.vcxproj.user" 
-            @ONLY)
     endif ()
 endif ()
 
@@ -166,4 +159,13 @@ function (add_ida_plugin plugin_name)
 
     # Define install rule
     install(TARGETS ${plugin_name} DESTINATION plugins)
+
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+        # When generating for Visual Studio, 
+        # generate user file for convenient debugging support.
+        configure_file(
+            "cmake/template.vcxproj.user" 
+            "${plugin_name}.vcxproj.user" 
+            @ONLY)
+    endif ()
 endfunction (add_ida_plugin)

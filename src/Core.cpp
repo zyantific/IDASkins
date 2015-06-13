@@ -56,8 +56,8 @@ Core::Core()
     if (firstStartVar.toBool())
     {
         auto pressedButton = QMessageBox::information(qApp->activeWindow(), 
-            PLUGIN_NAME": First start",
-            PLUGIN_NAME" detected that this is you first IDA startup with this plugin "
+            PLUGIN_NAME ": First start",
+            PLUGIN_NAME " detected that this is you first IDA startup with this plugin "
             "installed. Do you wish to select a theme now?", 
             QMessageBox::Yes | QMessageBox::No);
 
@@ -190,7 +190,7 @@ int Core::uiHook(void *userData, int notificationCode, va_list va)
         {
             if (thiz->m_lastUiActionWasFontChange)
             {
-                QMessageBox::warning(qApp->activeWindow(), "IDASkins",
+                QMessageBox::warning(qApp->activeWindow(), PLUGIN_NAME,
                     "Please note that altering the font settings when IDASkins is loaded "
                     "may cause strange effects on font rendering. It is recommended to "
                     "restart IDA after making font-related changes in the settings to avoid "
@@ -205,9 +205,15 @@ int Core::uiHook(void *userData, int notificationCode, va_list va)
 
 void Core::openThemeSelectionDialog()
 {
-    ThemeSelector selector(qApp->activeWindow());
-    connect(&selector, SIGNAL(accepted()), SLOT(onThemeSelectionAccepted()));
-    selector.exec();
+    m_themeSelector.reset(new ThemeSelector(qApp->activeWindow()));
+    connect(m_themeSelector.get(), SIGNAL(accepted()), SLOT(onThemeSelectionAccepted()));
+    m_themeSelector->show();
+}
+
+void Core::openObjectInspector()
+{
+    m_objectInspector.reset(new ObjectInspector);
+    m_objectInspector->show();
 }
 
 void Core::onThemeSelectionAccepted()

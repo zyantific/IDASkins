@@ -26,6 +26,8 @@
 #define CORE_HPP
 
 #include "Utils.hpp"
+#include "ThemeSelector.hpp"
+#include "ObjectInspector.hpp"
 
 #include <QObject>
 #include <ida.hpp>
@@ -42,6 +44,8 @@ class Core : public QObject, public Utils::Singleton<Core>
     Q_OBJECT
 
     bool m_lastUiActionWasFontChange;
+    std::unique_ptr<ThemeSelector> m_themeSelector;
+    std::unique_ptr<ObjectInspector> m_objectInspector;
 public:
     /**
      * @brief   Default constructor.
@@ -95,6 +99,10 @@ protected slots:
      *          @c openThemeSelectionDialog.
      */
     void onThemeSelectionAccepted();
+    /**
+     * @brief   Slot emitted when clickin the "Object inspector" button.
+     */
+    void openObjectInspector();
 };
 
 // ========================================================================= //

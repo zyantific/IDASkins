@@ -27,11 +27,13 @@
 #include "Utils.hpp"
 #include "ThemeManifest.hpp"
 #include "Config.hpp"
+#include "ObjectInspector.hpp"
 
 #include <memory>
 #include <QPixmap>
 #include <ida.hpp>
 #include <idp.hpp>
+#include "Core.hpp"
 
 // ========================================================================= //
 // [ThemeSelector]                                                           //
@@ -40,8 +42,11 @@
 ThemeSelector::ThemeSelector(QWidget *parent)
     : QDialog(parent)
 {
+    setModal(false);
     m_widgets.setupUi(this);
     connect(m_widgets.lwSkinSelection, SIGNAL(itemSelectionChanged()), SLOT(themeSelected()));
+    connect(m_widgets.btnObjectInspector, SIGNAL(clicked()), 
+        &Core::instance(), SLOT(openObjectInspector()));
     refresh();
 }
 
@@ -69,7 +74,9 @@ void ThemeSelector::refresh()
     // Publish theme list
     m_widgets.lwSkinSelection->clear();
     for (auto it = themes->begin(); it != themes->end(); ++it)
+    {
         m_widgets.lwSkinSelection->addItem(it->second->themeName());
+    }
 
     m_widgets.lwSkinSelection->setCurrentIndex(m_widgets.lwSkinSelection->rootIndex());
     m_curThemeList = std::move(themes);
@@ -94,7 +101,9 @@ void ThemeSelector::themeSelected()
             = QPixmap(entry.first.absolutePath() + "/" + entry.second->themePreviewImage());
     }
     else
+    {
         m_curPreviewImage = nullptr;
+    }
 
     updatePreview();
 }
@@ -103,7 +112,9 @@ void ThemeSelector::updatePreview()
 {
     auto lblPreview = m_widgets.lblPreview;
     if (!m_curPreviewImage)
+    {
         lblPreview->setText("no preview available");
+    }
     else
     {
         lblPreview->setPixmap(m_curPreviewImage.scaled(

@@ -35,7 +35,8 @@ set(headers
     "src/Settings.hpp"
     "src/ThemeManifest.hpp"
     "src/ThemeSelector.hpp"
-    "src/Utils.hpp")
+    "src/Utils.hpp"
+    "src/ObjectInspector.hpp")
 set(sources
     "src/Core.cpp"
     "src/IdaFontConfig.cpp"
@@ -43,9 +44,11 @@ set(sources
     "src/Settings.cpp"
     "src/ThemeManifest.cpp"
     "src/ThemeSelector.cpp"
-    "src/Utils.cpp")
+    "src/Utils.cpp"
+    "src/ObjectInspector.cpp")
 set(forms
-    "ui/ThemeSelector.ui")
+    "ui/ThemeSelector.ui"
+    "ui/ObjectInspector.ui")
 
 # Qt
 set(CMAKE_AUTOMOC ON)
