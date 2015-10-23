@@ -61,7 +61,7 @@ IDAView, hexview_t, CustomIDAMemo {
 	border: none;
 }
 
-CustomIDAMemo {
+CustomIDAMemo, EditContainer {
     font-family: "<TEXT_INPUT_FONT_FAMILY>";
     font-size: <TEXT_INPUT_FONT_SIZE>;
     font-style: <TEXT_INPUT_FONT_STYLE>;

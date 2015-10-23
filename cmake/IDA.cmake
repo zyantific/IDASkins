@@ -26,8 +26,8 @@ cmake_minimum_required(VERSION 2.8.12)
 cmake_policy(SET CMP0054 NEW)
 
 option(IDA_ARCH_64 "Build for 64 bit IDA" False)
-option(IDA_SDK_PATH "Path to IDA SDK")
-option(IDA_INSTALL_DIR "Install path of IDA")
+set(IDA_SDK_PATH "" CACHE STRING "Path to IDA SDK")
+set(IDA_INSTALL_DIR "" CACHE STRING "Install path of IDA")
 
 if (NOT IDA_SDK_PATH)
     set(ida_sdk $ENV{IDASDK})
