@@ -55,9 +55,17 @@ public:
      */
     ~Core();
     /**
+     * @brief   Initialises the plugin.
+     */
+    void initPlugin();
+    /**
      * @brief   Runs the plugin.
      */
     void runPlugin();
+    /**
+     * @brief   Shuts the plugin down.
+     */
+    void shutdownPlugin();
 protected:
     /**
      * @brief   Opens the theme selection dialog.

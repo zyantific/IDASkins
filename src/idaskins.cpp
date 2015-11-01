@@ -48,7 +48,7 @@ int idaapi init()
 
     try
     {
-        Core::instance();
+        Core::instance().initPlugin();
     }
     catch (const std::runtime_error &e)
     {
@@ -73,7 +73,10 @@ void idaapi run(int /*arg*/)
 void idaapi term()
 {
     if (Core::isInstantiated())
+    {
+        Core::instance().shutdownPlugin();
         Core::freeInstance();
+    }
 }
 
 plugin_t PLUGIN =

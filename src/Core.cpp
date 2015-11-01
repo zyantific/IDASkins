@@ -43,6 +43,16 @@
 Core::Core()
     : m_lastUiActionWasFontChange(false)
 {
+    
+}
+
+Core::~Core()
+{
+    
+}
+
+void Core::initPlugin()
+{
     // If first start with plugin, ask for theme.
     Settings settings;
     QVariant firstStartVar = settings.value(Settings::kFirstStart, true);
@@ -54,10 +64,10 @@ Core::Core()
 
     if (firstStartVar.toBool())
     {
-        auto pressedButton = QMessageBox::information(qApp->activeWindow(), 
+        auto pressedButton = QMessageBox::information(qApp->activeWindow(),
             PLUGIN_NAME ": First start",
             PLUGIN_NAME " detected that this is you first IDA startup with this plugin "
-            "installed. Do you wish to select a theme now?", 
+            "installed. Do you wish to select a theme now?",
             QMessageBox::Yes | QMessageBox::No);
 
         if (pressedButton == QMessageBox::Yes)
@@ -71,16 +81,14 @@ Core::Core()
     hook_to_notification_point(HT_UI, &uiHook, this);
 }
 
-Core::~Core()
-{
-    unhook_from_notification_point(HT_UI, &uiHook, this);
-}
-
 void Core::runPlugin()
 {
     openThemeSelectionDialog();
+}
 
-    applyStylesheetFromSettings();
+void Core::shutdownPlugin()
+{
+    unhook_from_notification_point(HT_UI, &uiHook, this);
 }
 
 bool Core::applyStylesheet(QDir &themeDir)
@@ -98,42 +106,6 @@ bool Core::applyStylesheet(QDir &themeDir)
     qApp->setStyleSheet(data);
     request_refresh(IWID_ALL);
     msg("[" PLUGIN_NAME "] Skin file successfully applied!\n");
-
-    /*
-    static bool first = true;
-    // Information gathering
-    if (!first)
-    {
-        QFile log(QString(idadir(nullptr)) + "/skin/object_log.log");
-        log.open(QFile::WriteOnly);
-        std::function<void(QObject*, int)> helper = [&](QObject *element, int depth)
-        {
-            for (int i = 0; i < depth; ++i)
-                log.write("--");
-            log.write(element->metaObject()->className());
-            log.write(" name: ");
-            log.write(element->objectName().toAscii().data());
-            if (strcmp(element->metaObject()->className(), "QLabel") == 0)
-            {
-                log.write("; text: ");
-                log.write(((QLabel*)element)->text().toAscii().data());
-            }
-            if (strcmp(element->metaObject()->className(), "QAbstractButton") == 0)
-            {
-                log.write("; icon: ");
-                log.write(((QAbstractButton*)element)->icon().name().toAscii().data());
-            }
-            log.write("\n");
-            auto children = element->children();
-            for (auto it = children.begin(); it != children.end(); ++it)
-                helper(*it, depth + 1);
-        };
-        helper(qApp->activeWindow(), 0);
-        log.flush();
-        log.close();
-    }
-    first = false;
-    */
 
     return true;
 }
@@ -225,6 +197,7 @@ void Core::onThemeSelectionAccepted()
     {
         Settings().setValue(Settings::kSelectedThemeDir, 
             selector->selectedThemeDir()->dirName());
+        applyStylesheetFromSettings();
     }
 }
 
