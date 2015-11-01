@@ -86,7 +86,7 @@ if __name__ == '__main__':
                 cmake_bin, 
                 '-Dida_sdk=' + os.path.join(args.ida_sdks_path, 'idasdk{}{}'.format(*cur_target)),
                 '-G', 'Visual Studio 10',
-                '-DCMAKE_INSTALL_PREFIX:PATH=../dist/IDA-{}.{}'.format(*cur_target),
+                '-DPLUGIN_INSTALL_PREFIX:PATH=../dist/IDA-{}.{}'.format(*cur_target),
                 ] + args.cmake_args.split(' ') + ['..'] + (
                     ['-DIDA_ARCH_64=TRUE'] if arch == 64 else []
                 ), cwd=build_dir)
