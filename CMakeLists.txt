@@ -70,3 +70,5 @@ endforeach()
 include_directories("src")
 add_ida_plugin(${CMAKE_PROJECT_NAME} ${headers} ${sources} ${form_headers})
 target_link_libraries(${CMAKE_PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
+
+install(DIRECTORY skin/ DESTINATION skin)

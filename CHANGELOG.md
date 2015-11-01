@@ -21,3 +21,9 @@ Changelog
   - added skin "IDA default"
   - minor dark-theme fixes
   - switched to cmake build system
+
+### 1.3.0 -> 1.4.0:
+  - added object-inspector for easy finding of widget names and types for
+    theme development
+  - fixed infinite-loop of message boxes that could occur on first start
+  - fixed issue with IDA installations with unaltered font-settings
