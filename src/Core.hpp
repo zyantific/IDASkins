@@ -38,7 +38,9 @@
 /**
  * @brief   Plugin core singleton.
  */
-class Core : public QObject, public Utils::Singleton<Core>
+class Core 
+    : public QObject
+    , public Utils::Singleton<Core>
 {
     Q_OBJECT
 

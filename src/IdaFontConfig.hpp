@@ -58,8 +58,7 @@ public:
     bool    italic();
     //QString style ();
 protected:
-    template<typename T>
-    T getSetting(const QString &key);
+    QVariant getSetting(const QString &key);
     static const char *typeToSettingsKey(FontType type);
 protected:
     FontType m_type;
@@ -69,18 +68,17 @@ protected:
 // Implementation of inline functions [IdaFontConfig]                                            //
 // ============================================================================================= //
 
-template <typename T> inline
-T IdaFontConfig::getSetting(const QString &key)
+inline QVariant IdaFontConfig::getSetting(const QString &key)
 {
     beginGroup("Font");
 #   if IDA_SDK_VERSION >= 640
-        beginGroup(typeToSettingsKey(m_type));
+    beginGroup(typeToSettingsKey(m_type));
 #   endif
 
-    T tmp = value(key).value<T>();
+    auto tmp = value(key);
 
 #   if IDA_SDK_VERSION >= 640
-        endGroup();
+    endGroup();
 #   endif
     endGroup();
     return tmp;

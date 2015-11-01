@@ -62,7 +62,7 @@ void Core::initPlugin()
     else
         settings.remove(Settings::kFirstStart);
 
-    if (firstStartVar.toBool())
+    if (firstStart)
     {
         auto pressedButton = QMessageBox::information(qApp->activeWindow(),
             PLUGIN_NAME ": First start",

@@ -23,6 +23,9 @@
 
 #include "IdaFontConfig.hpp"
 
+#include <QFont>
+#include <QFontInfo>
+
 // ============================================================================================= //
 // [IdaFontConfig]                                                                               //
 // ============================================================================================= //
@@ -36,22 +39,40 @@ IdaFontConfig::IdaFontConfig(FontType type)
 
 QString IdaFontConfig::family()
 {
-    return getSetting<QString>("Name");
+    auto x = getSetting("Name");
+    if (x.isValid())
+        return x.value<QString>();
+
+#ifdef _WIN32
+    // On Windows, HR doesn't use the system's default monospace-font.
+    return "Fixedsys";
+#else
+    // It seems like there is no clean way of obtaining the name of the platform's default 
+    // monospace font in Qt4. This issue was addressed in Qt 5.2.
+    // TODO: for IDA >= 6.9, use Qt5 approach utilizing `QFontDatabase`.
+    QFont font("238ru<MGduz(asuidfz8AS)F0zEmguz234t");
+    font.setStyleHint(QFont::TypeWriter);
+    QFontInfo finfo(font);
+    return finfo.family();
+#endif
 }
 
 quint32 IdaFontConfig::size()
 {
-    return getSetting<quint32>("Size");
+    auto x = getSetting("Size");
+    return x.isValid() ? x.value<quint32>() : 10;
 }
 
 bool IdaFontConfig::bold()
 {
-    return getSetting<bool>("Bold");
+    auto x = getSetting("Bold");
+    return x.isValid() ? x.value<bool>() : false;
 }
 
 bool IdaFontConfig::italic()
 {
-    return getSetting<bool>("Italic");
+    auto x = getSetting("Italic");
+    return x.isValid() ? x.value<bool>() : false;
 }
 
 //QString IdaFontConfig::style()
