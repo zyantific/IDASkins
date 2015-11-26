@@ -101,7 +101,7 @@ void ThemeSelector::themeSelected()
     }
     else
     {
-        m_curPreviewImage = nullptr;
+        m_curPreviewImage = QPixmap();
     }
 
     updatePreview();

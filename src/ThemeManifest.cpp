@@ -75,7 +75,7 @@ void ThemeManifest::parseFile(const QString &manifestFilePath)
     if (xml.hasError())
     {
         throw XInvalidManifest(
-            ("error while parsing XML: " + xml.errorString()).toAscii().data());
+            ("error while parsing XML: " + xml.errorString()).toLatin1().data());
     }
 }
 

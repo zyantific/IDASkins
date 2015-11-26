@@ -1,7 +1,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2014 athre0z
+# Copyright (c) 2015 athre0z
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ cmake_policy(SET CMP0054 NEW)
 
 project(IDASkins)
 include("cmake/IDA.cmake")
+set(IDA_VERSION 690 CACHE INT "IDA Version to build for (e.g. 6.9 is 690).")
 
 set(headers
     "src/Config.hpp"
@@ -50,11 +51,16 @@ set(forms
     "ui/ThemeSelector.ui"
     "ui/ObjectInspector.ui")
 
-# Qt
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-find_package(Qt4 REQUIRED QtCore QtGui)
-QT4_WRAP_UI(form_headers ${forms})
+# IDA 6.9 and above use Qt5, older versions Qt4.
+if (IDA_VERSION LESS 690)
+    find_package(Qt4 REQUIRED QtCore QtGui)
+    QT4_WRAP_UI(form_headers ${forms})
+else ()
+    find_package(Qt5Widgets REQUIRED)
+    QT5_WRAP_UI(form_headers ${forms})
+endif ()
 
 # Hack Qt to use release libraries even when generating debug binaries
 # for compatibility with IDA.
@@ -69,6 +75,11 @@ endforeach()
 # Add IDA plugin target
 include_directories("src")
 add_ida_plugin(${CMAKE_PROJECT_NAME} ${headers} ${sources} ${form_headers})
-target_link_libraries(${CMAKE_PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
+
+if (IDA_VERSION LESS 690)
+    target_link_libraries(${CMAKE_PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
+else ()
+    target_link_libraries(${CMAKE_PROJECT_NAME} Qt5::Widgets)
+endif ()
 
 install(DIRECTORY skin/ DESTINATION skin)

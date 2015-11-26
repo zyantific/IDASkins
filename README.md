@@ -15,4 +15,4 @@ Screenshot above shows the enclosed `stylesheet.css` in combination with the [id
 Place `IDASkins.plX` into the `plugins` directory of your IDA installation. The theme files (the `skin` directory) needs to be copied to the root of your IDA installation.
 
 ## Theming
-Theming IDA using IDASkins works using [Qt stylesheets](http://qt-project.org/doc/qt-4.7/stylesheet.html). For information on the most important IDA-specific UI elements, take a look in the enclosed default `stylesheet.css`.
+Theming IDA using IDASkins works using [Qt stylesheets](http://qt-project.org/doc/qt-4.8/stylesheet.html). For information on the most important IDA-specific UI elements, take a look in the enclosed default `stylesheet.css`. **Pull-requests for new themes are very welcome!**
