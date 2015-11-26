@@ -27,3 +27,6 @@ Changelog
     theme development
   - fixed infinite-loop of message boxes that could occur on first start
   - fixed issue with IDA installations with unaltered font-settings
+
+### 1.4.0 -> 1.4.1:
+  - added support for IDA versions 6.9 and higher (Qt5)
