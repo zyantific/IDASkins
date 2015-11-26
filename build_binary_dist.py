@@ -85,7 +85,7 @@ if __name__ == '__main__':
             proc = Popen([
                 cmake_bin, 
                 '-Dida_sdk=' + os.path.join(args.ida_sdks_path, 'idasdk{}{}'.format(*cur_target)),
-                '-G', 'Visual Studio 10',
+                '-G', 'Visual Studio ' + ('10' if cur_target[0] <= 6 and cur_target[1] <= 8 else '14'),
                 '-DPLUGIN_INSTALL_PREFIX:PATH=../dist/IDA-{}.{}'.format(*cur_target),
                 '-DIDA_VERSION={}{}0'.format(*cur_target)
                 ] + args.cmake_args.split(' ') + ['..'] + (
