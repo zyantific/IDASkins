@@ -78,7 +78,8 @@ elseif (UNIX)
     set(ida_lib_path_platform "linux")
 
     if (IDA_ARCH_64)
-        message(SEND_ERROR "FIXME: What is the file extension here?")
+        set(plugin_extension ".plx64")
+    else()
         set(plugin_extension ".plx")
     endif()
 elseif (APPLE) # Untested!
@@ -86,7 +87,7 @@ elseif (APPLE) # Untested!
     set(ida_lib_path_platform "mac")
 
     if (IDA_ARCH_64)
-        message(SEND_ERROR "FIXME: What is the file extension here?")
+        set(plugin_extension ".pmc64")
     else()
         set(plugin_extension ".pmc")
     endif()
