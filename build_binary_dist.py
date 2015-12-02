@@ -41,7 +41,7 @@ def get_cmake_gen(platform, cur_target):
     if platform == 'unix':
         return 'Unix Makefiles'
     elif platform == 'win':
-        return 'Visual Studio' + ('10' if cur_target[0] <= 6 and cur_target[1] <= 8 else '14')
+        return 'Visual Studio ' + ('10' if cur_target[0] <= 6 and cur_target[1] <= 8 else '14')
     else:
         raise Exception('Unknown platform %s' % platform)
 
