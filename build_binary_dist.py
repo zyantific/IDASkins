@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 """
-    This script build the binary distribution for the Windows version of IDA
-    PRO for multiple IDA versions in one batch.
+    This script builds the binary distribution for multiple IDA versions in 
+    one batch.
 
     The MIT License (MIT)
 
@@ -43,7 +43,7 @@ def get_cmake_gen(platform, cur_target):
     elif platform == 'win':
         return 'Visual Studio ' + ('10' if cur_target[0] <= 6 and cur_target[1] <= 8 else '14')
     else:
-        raise Exception('Unknown platform %s' % platform)
+        raise Exception('Unknown platform "%s"' % platform)
 
 
 def get_build_solution_arguments(platform):
@@ -53,7 +53,7 @@ def get_build_solution_arguments(platform):
     elif platform == 'unix':
         return [build_bin]
     else:
-        raise Exception('Unknown platform %s' % platform)
+        raise Exception('Unknown platform "%s"' % platform)
 
 
 def get_install_solution_arguments(platform):
@@ -71,17 +71,20 @@ if __name__ == '__main__':
     # Parse arguments
     #
     parser = argparse.ArgumentParser(
-            description='Batch build script creating the plugin for multiple IDA versions')
-    parser.add_argument('ida_sdks_path', type=str,
+            description='Batch build script creating the plugin for multiple IDA versions.')
+    
+    target_args = parser.add_argument_group('target configuration')
+    target_args.add_argument('--ida-sdks-path', '-i', type=str, required=True,
             help='Path containing the IDA SDKs for the desired IDA target versions')
+    target_args.add_argument('--platform', '-p', type=str, choices=['win', 'unix'],
+            help='Platform to build for (e.g. win, unix)', required=True)
+    target_args.add_argument('--target-version', '-t', action='append', required=True,
+            help='IDA versions to build for (e.g. 6.7). May be passed multiple times.')
+
     parser.add_argument('--skip-install', action='store_true', default=False,
-            help='Path containing the IDA SDKs for the desired IDA target versions')
-    parser.add_argument('platform', type=str, choices=['win', 'unix'],
-            help='platform to build for (e.g. win, unix)')
-    parser.add_argument('--target-version', '-t', metavar='target_version',
-            action='append', required=True, help='Versions to build (e.g. 6.7)')
+            help='Do not execute install target')
     parser.add_argument('cmake_args', default='', type=str,
-            help='Additional arguments passed to cmake', nargs=argparse.REMAINDER)
+            help='Additional arguments passed to CMake', nargs=argparse.REMAINDER)
     args = parser.parse_args()
 
     def print_usage(error=None):
