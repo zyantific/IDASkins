@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 """
-    This script build the binary distribution for the Windows version of IDA
-    PRO for multiple IDA versions in one batch.
+    This script builds the binary distribution for multiple IDA versions in 
+    one batch.
 
     The MIT License (MIT)
 
@@ -32,18 +32,59 @@ import argparse
 from subprocess import Popen, PIPE
 from distutils.spawn import find_executable
 
+
+def get_build_cmd(platform):
+    return {'unix': 'make', 'win': 'MSBuild'}[platform]
+
+
+def get_cmake_gen(platform, cur_target):
+    if platform == 'unix':
+        return 'Unix Makefiles'
+    elif platform == 'win':
+        return 'Visual Studio ' + ('10' if cur_target[0] <= 6 and cur_target[1] <= 8 else '14')
+    else:
+        raise Exception('Unknown platform "%s"' % platform)
+
+
+def get_build_solution_arguments(platform):
+    build_bin = get_build_cmd(platform)
+    if platform == 'win':
+        return [build_bin, 'IDASkins.sln', '/p:Configuration=Release']
+    elif platform == 'unix':
+        return [build_bin]
+    else:
+        raise Exception('Unknown platform "%s"' % platform)
+
+
+def get_install_solution_arguments(platform):
+    build_bin = get_build_cmd(platform)
+    if platform == 'win':
+        return [build_bin, 'INSTALL.vcxproj', '/p:Configuration=Release']
+    elif platform == 'unix':
+        return [build_bin, 'install', 'VERBOSE=1']
+    else:
+        raise Exception('Unrecognized platform "%s"' % platform)
+
+
 if __name__ == '__main__':
     #
     # Parse arguments
     #
     parser = argparse.ArgumentParser(
-        description='Batch build script creating the plugin for multiple IDA versions')
-    parser.add_argument('ida_sdks_path', type=str, 
-        help='Path containing the IDA SDKs for the desired IDA target versions')
-    parser.add_argument('--cmake_args', default='', type=str,
-        help='Additional arguments passed to cmake', nargs='?')
-    parser.add_argument('target_versions', metavar='target_version', type=str, 
-        nargs='+')
+            description='Batch build script creating the plugin for multiple IDA versions.')
+    
+    target_args = parser.add_argument_group('target configuration')
+    target_args.add_argument('--ida-sdks-path', '-i', type=str, required=True,
+            help='Path containing the IDA SDKs for the desired IDA target versions')
+    target_args.add_argument('--platform', '-p', type=str, choices=['win', 'unix'],
+            help='Platform to build for (e.g. win, unix)', required=True)
+    target_args.add_argument('--target-version', '-t', action='append', required=True,
+            help='IDA versions to build for (e.g. 6.7). May be passed multiple times.')
+
+    parser.add_argument('--skip-install', action='store_true', default=False,
+            help='Do not execute install target')
+    parser.add_argument('cmake_args', default='', type=str,
+            help='Additional arguments passed to CMake', nargs=argparse.REMAINDER)
     args = parser.parse_args()
 
     def print_usage(error=None):
@@ -53,7 +94,7 @@ if __name__ == '__main__':
         exit()
 
     target_versions = []
-    for cur_version in args.target_versions:
+    for cur_version in args.target_version:
         cur_version = cur_version.strip().split('.')
         try:
             target_versions.append((int(cur_version[0]), int(cur_version[1])))
@@ -64,11 +105,11 @@ if __name__ == '__main__':
     # Find tools
     #
     cmake_bin = find_executable('cmake')
-    msbuild_bin = find_executable('MSBuild')
+    build_bin = find_executable(get_build_cmd(args.platform))
     if not cmake_bin:
         print_usage('[-] Unable to find cmake binary')
-    if not msbuild_bin:
-        print_usage('[-] Unable to find MSBuild (please use Visual Studio CMD)')
+    if not build_bin:
+        print_usage('[-] Unable to find build (please use Visual Studio MSBuild CMD or make)')
 
     #
     # Build targets
@@ -82,28 +123,37 @@ if __name__ == '__main__':
                 if e.errno != errno.EEXIST:
                     raise
 
-            proc = Popen([
-                cmake_bin, 
+
+            # Run cmake
+            cmake_cmd = [cmake_bin,
                 '-Dida_sdk=' + os.path.join(args.ida_sdks_path, 'idasdk{}{}'.format(*cur_target)),
-                '-G', 'Visual Studio ' + ('10' if cur_target[0] <= 6 and cur_target[1] <= 8 else '14'),
-                '-DPLUGIN_INSTALL_PREFIX:PATH=../dist/IDA-{}.{}'.format(*cur_target),
+                '-G', get_cmake_gen(args.platform, cur_target),
+                '-DIDA_INSTALL_DIR:PATH=../dist/IDA-{}.{}'.format(*cur_target),
                 '-DIDA_VERSION={}{}0'.format(*cur_target)
-                ] + args.cmake_args.split(' ') + ['..'] + (
+                ] + args.cmake_args + ['..'] + (
                     ['-DIDA_ARCH_64=TRUE'] if arch == 64 else []
-                ), cwd=build_dir)
+                )
+            print 'Cmake command:'
+            print ' '.join("'%s'" % x if ' ' in x else x for x in cmake_cmd)
+
+            proc = Popen(cmake_cmd, cwd=build_dir)
             if proc.wait() != 0:
                 print('[-] CMake failed, giving up.')
                 exit()
 
-            proc = Popen([msbuild_bin, 'IDASkins.sln', '/p:Configuration=Release'], cwd=build_dir)
+
+            # Build plugin
+            proc = Popen(get_build_solution_arguments(args.platform), cwd=build_dir)
             if proc.wait() != 0:
-                print('[-] MSBuild failed, giving up.')
+                print('[-] Build failed, giving up.')
                 exit()
 
-            proc = Popen([msbuild_bin, 'INSTALL.vcxproj', '/p:Configuration=Release'], 
-                cwd=build_dir)
-            if proc.wait() != 0:
-                print('[-] MSBuild INSTALL failed, giving up.')
-                exit()
+            if not args.skip_install:
+                # Install plugin
+                proc = Popen(get_install_solution_arguments(args.platform),
+                    cwd=build_dir)
+                if proc.wait() != 0:
+                    print('[-] Install failed, giving up.')
+                    exit()
 
     print('[+] Done!')

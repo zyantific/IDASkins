@@ -29,13 +29,34 @@ option(IDA_ARCH_64 "Build for 64 bit IDA" False)
 set(IDA_SDK_PATH "" CACHE PATH "Path to IDA SDK")
 set(IDA_INSTALL_DIR "" CACHE PATH "Install path of IDA")
 
-if (NOT IDA_SDK_PATH)
-    set(ida_sdk $ENV{IDASDK})
-endif ()
+# If variable has not been set, then set it with the environment variable
+function(set_var_from_env dst_var src_var env_var_name)
+    # Check if variable is already set
+    if (DEFINED ${dst_var})
+        message(STATUS "variable ${dst_var} was already set to \"${${dst_var}}\"")
+        RETURN()
+    endif()
 
-if (NOT IDA_INSTALL_DIR)
-    file(TO_CMAKE_PATH $ENV{IDADIR} ida_dir)
-endif ()
+    # Check if source variable set
+    message(STATUS "Checking ${src_var}, ${${src_var}}")
+    if (DEFINED ${src_var})
+        message(STATUS "Getting ${dst_var} value from source \"${src_var}\"")
+        set(${dst_var} ${${src_var}} PARENT_SCOPE)
+        RETURN()
+    endif()
+
+    # Check that environment variable was set
+    if (DEFINED ENV{${env_var_name}})
+        set(${dst_var} $ENV{${env_var_name}} PARENT_SCOPE)
+    else()
+        message(FATAL_ERROR "ENV variable \"${env_var_name}\" must be set")
+    endif()
+endfunction()
+
+set_var_from_env(ida_sdk IDA_SDK_PATH IDASDK)
+
+set_var_from_env(ida_dir_env IDA_INSTALL_DIR IDADIR)
+file(TO_CMAKE_PATH "${ida_dir_env}" ida_dir)
 
 # Compiler specific switches
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
@@ -78,7 +99,8 @@ elseif (UNIX)
     set(ida_lib_path_platform "linux")
 
     if (IDA_ARCH_64)
-        message(SEND_ERROR "FIXME: What is the file extension here?")
+        set(plugin_extension ".plx64")
+    else()
         set(plugin_extension ".plx")
     endif()
 elseif (APPLE) # Untested!
@@ -86,7 +108,7 @@ elseif (APPLE) # Untested!
     set(ida_lib_path_platform "mac")
 
     if (IDA_ARCH_64)
-        message(SEND_ERROR "FIXME: What is the file extension here?")
+        set(plugin_extension ".pmc64")
     else()
         set(plugin_extension ".pmc")
     endif()
