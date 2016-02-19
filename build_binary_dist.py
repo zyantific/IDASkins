@@ -34,11 +34,11 @@ from distutils.spawn import find_executable
 
 
 def get_build_cmd(platform):
-    return {'unix': 'make', 'win': 'MSBuild'}[platform]
+    return {'mac': 'make', 'unix': 'make', 'win': 'MSBuild'}[platform]
 
 
 def get_cmake_gen(platform, cur_target):
-    if platform == 'unix':
+    if platform == 'unix' or platform == 'mac':
         return 'Unix Makefiles'
     elif platform == 'win':
         return 'Visual Studio ' + ('10' if cur_target[0] <= 6 and cur_target[1] <= 8 else '14')
@@ -50,7 +50,7 @@ def get_build_solution_arguments(platform):
     build_bin = get_build_cmd(platform)
     if platform == 'win':
         return [build_bin, 'IDASkins.sln', '/p:Configuration=Release']
-    elif platform == 'unix':
+    elif platform == 'unix' or platform == 'mac':
         return [build_bin]
     else:
         raise Exception('Unknown platform "%s"' % platform)
@@ -60,7 +60,7 @@ def get_install_solution_arguments(platform):
     build_bin = get_build_cmd(platform)
     if platform == 'win':
         return [build_bin, 'INSTALL.vcxproj', '/p:Configuration=Release']
-    elif platform == 'unix':
+    elif platform == 'unix' or platform == 'mac':
         return [build_bin, 'install', 'VERBOSE=1']
     else:
         raise Exception('Unrecognized platform "%s"' % platform)
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     target_args = parser.add_argument_group('target configuration')
     target_args.add_argument('--ida-sdks-path', '-i', type=str, required=True,
             help='Path containing the IDA SDKs for the desired IDA target versions')
-    target_args.add_argument('--platform', '-p', type=str, choices=['win', 'unix'],
+    target_args.add_argument('--platform', '-p', type=str, choices=['win', 'unix', 'mac'],
             help='Platform to build for (e.g. win, unix)', required=True)
     target_args.add_argument('--target-version', '-t', action='append', required=True,
             help='IDA versions to build for (e.g. 6.7). May be passed multiple times.')

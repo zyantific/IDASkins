@@ -61,7 +61,7 @@ file(TO_CMAKE_PATH "${ida_dir_env}" ida_dir)
 # Compiler specific switches
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
         "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    set(compiler_specific "-m32 -std=c++0x -Werror")
+    set(compiler_specific "-m32 -std=c++0x ")
     set(ida_lib_path_compiler "gcc")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set(compiler_specific "/WX /wd4996 /MP /D__VC__")
@@ -94,6 +94,15 @@ if (WIN32)
     else()
         set(plugin_extension ".plw")
     endif()
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(os_specific "-D__MAC__ -D_FORTIFY_SOURCE=0")
+    set(ida_lib_path_platform "mac")
+
+    if (IDA_ARCH_64)
+        set(plugin_extension ".pmc64")
+    else()
+        set(plugin_extension ".pmc")
+    endif()
 elseif (UNIX)
     set(os_specific "-D__LINUX__")
     set(ida_lib_path_platform "linux")
@@ -102,15 +111,6 @@ elseif (UNIX)
         set(plugin_extension ".plx64")
     else()
         set(plugin_extension ".plx")
-    endif()
-elseif (APPLE) # Untested!
-    set(os_specific "-D__MAC__ -D_FORTIFY_SOURCE=0")
-    set(ida_lib_path_platform "mac")
-
-    if (IDA_ARCH_64)
-        set(plugin_extension ".pmc64")
-    else()
-        set(plugin_extension ".pmc")
     endif()
 endif ()
 
@@ -148,7 +148,7 @@ if (WIN32)
 elseif (UNIX OR APPLE)
     # We hardwire the path here as the lib lacks the "lib" prefix, making
     # find_library ignoring it.
-    list(APPEND IDA_PRO_LIBRARY "${IDA_LIB_DIR}/pro.a")
+    list(APPEND ida_libraries  "${IDA_LIB_DIR}/pro.a")
 endif ()
 set(ida_libraries ${ida_libraries} CACHE INTERNAL "IDA libraries" FORCE)
 include_directories("${ida_sdk}/include")
@@ -177,7 +177,7 @@ function (add_ida_plugin plugin_name)
         SUFFIX ${plugin_extension}
         OUTPUT_NAME ${plugin_name})
 
-    target_link_libraries(${plugin_name} ${ida_libraries})
+    target_link_libraries(${plugin_name} ${ida_libraries} ida)
 
     # Define install rule
     install(TARGETS ${plugin_name} DESTINATION plugins)
