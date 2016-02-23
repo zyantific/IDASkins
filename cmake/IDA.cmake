@@ -149,6 +149,8 @@ elseif (UNIX OR APPLE)
     # We hardwire the path here as the lib lacks the "lib" prefix, making
     # find_library ignoring it.
     list(APPEND ida_libraries  "${IDA_LIB_DIR}/pro.a")
+    find_library(IDA_IDA_LIBRARY NAMES "ida" PATHS ${IDA_LIB_DIR} REQUIRED)
+    list(APPEND ida_libraries ${IDA_IDA_LIBRARY})
 endif ()
 set(ida_libraries ${ida_libraries} CACHE INTERNAL "IDA libraries" FORCE)
 include_directories("${ida_sdk}/include")
@@ -177,7 +179,7 @@ function (add_ida_plugin plugin_name)
         SUFFIX ${plugin_extension}
         OUTPUT_NAME ${plugin_name})
 
-    target_link_libraries(${plugin_name} ${ida_libraries} ida)
+    target_link_libraries(${plugin_name} ${ida_libraries})
 
     # Define install rule
     install(TARGETS ${plugin_name} DESTINATION plugins)
