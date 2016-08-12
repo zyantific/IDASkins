@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
 """
-    This script builds the binary distribution for multiple IDA versions in 
+    This script builds the binary distribution for multiple IDA versions in
     one batch.
 
     The MIT License (MIT)
 
     Copyright (c) 2014 athre0z
-    
+
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
     in the Software without restriction, including without limitation the rights
@@ -72,10 +72,12 @@ if __name__ == '__main__':
     #
     parser = argparse.ArgumentParser(
             description='Batch build script creating the plugin for multiple IDA versions.')
-    
+
     target_args = parser.add_argument_group('target configuration')
     target_args.add_argument('--ida-sdks-path', '-i', type=str, required=True,
             help='Path containing the IDA SDKs for the desired IDA target versions')
+    target_args.add_argument('--ida-path', '-I', type=str, required=True,
+            help='Path containing installed IDA for the desired IDA target versions')
     target_args.add_argument('--platform', '-p', type=str, choices=['win', 'unix', 'mac'],
             help='Platform to build for (e.g. win, unix)', required=True)
     target_args.add_argument('--target-version', '-t', action='append', required=True,
@@ -127,6 +129,7 @@ if __name__ == '__main__':
             # Run cmake
             cmake_cmd = [cmake_bin,
                 '-Dida_sdk=' + os.path.join(args.ida_sdks_path, 'idasdk{}{}'.format(*cur_target)),
+                '-Dida_dir_env=' + os.path.join(args.ida_path),
                 '-G', get_cmake_gen(args.platform, cur_target),
                 '-DIDA_INSTALL_DIR:PATH=../dist/IDA-{}.{}'.format(*cur_target),
                 '-DIDA_VERSION={}{}0'.format(*cur_target)
