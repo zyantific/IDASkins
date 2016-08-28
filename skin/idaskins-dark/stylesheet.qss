@@ -87,11 +87,8 @@ hexview_t {
 QScrollBar {
     background-color: #363636;
     width: 20px;
+    height: 20px;
     margin: 0 0 0 0;
-}
-
-QScrollBar::horizontal {
-    min-height: 15px;
 }
 
 QScrollBar::sub-line, QScrollBar::add-line {
