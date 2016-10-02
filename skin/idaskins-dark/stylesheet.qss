@@ -209,3 +209,13 @@ QTreeView::item:selected, QListView::item:selected, QTableView::item:selected {
     background-color: #474747;
     color: #ddd;
 }
+
+QToolTip, QTipLabel {
+    border: 1px solid #AA5500;
+    border-radius: 3px;
+    background: #111111;
+    color: #ddd;
+    margin: 0;
+    padding: 0;
+}
+
