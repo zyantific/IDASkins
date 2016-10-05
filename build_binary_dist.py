@@ -6,7 +6,7 @@
 
     The MIT License (MIT)
 
-    Copyright (c) 2014 athre0z
+    Copyright (c) 2016 athre0z
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,8 @@
     SOFTWARE.
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 import os
 import errno
 import argparse
@@ -34,11 +36,11 @@ from distutils.spawn import find_executable
 
 
 def get_build_cmd(platform):
-    return {'mac': 'make', 'unix': 'make', 'win': 'MSBuild'}[platform]
+    return {'unix': 'make', 'win': 'MSBuild'}[platform]
 
 
 def get_cmake_gen(platform, cur_target):
-    if platform == 'unix' or platform == 'mac':
+    if platform == 'unix':
         return 'Unix Makefiles'
     elif platform == 'win':
         return 'Visual Studio ' + ('10' if cur_target[0] <= 6 and cur_target[1] <= 8 else '14')
@@ -50,8 +52,10 @@ def get_build_solution_arguments(platform):
     build_bin = get_build_cmd(platform)
     if platform == 'win':
         return [build_bin, 'IDASkins.sln', '/p:Configuration=Release']
-    elif platform == 'unix' or platform == 'mac':
-        return [build_bin]
+    elif platform == 'unix':
+        # Speed things up a little.
+        from multiprocessing import cpu_count
+        return [build_bin, '-j%d' % cpu_count()]
     else:
         raise Exception('Unknown platform "%s"' % platform)
 
@@ -60,7 +64,7 @@ def get_install_solution_arguments(platform):
     build_bin = get_build_cmd(platform)
     if platform == 'win':
         return [build_bin, 'INSTALL.vcxproj', '/p:Configuration=Release']
-    elif platform == 'unix' or platform == 'mac':
+    elif platform == 'unix':
         return [build_bin, 'install', 'VERBOSE=1']
     else:
         raise Exception('Unrecognized platform "%s"' % platform)
@@ -76,10 +80,12 @@ if __name__ == '__main__':
     target_args = parser.add_argument_group('target configuration')
     target_args.add_argument('--ida-sdks-path', '-i', type=str, required=True,
             help='Path containing the IDA SDKs for the desired IDA target versions')
-    target_args.add_argument('--platform', '-p', type=str, choices=['win', 'unix', 'mac'],
+    target_args.add_argument('--platform', '-p', type=str, choices=['win', 'unix'],
             help='Platform to build for (e.g. win, unix)', required=True)
     target_args.add_argument('--target-version', '-t', action='append', required=True,
-            help='IDA versions to build for (e.g. 6.7). May be passed multiple times.')
+            help='IDA versions to build for (e.g. 6.9). May be passed multiple times.')
+    target_args.add_argument('--idaq-path', type=str, required=False,
+            help='Path with idaq binary, required on unixoid platforms for linkage.')
 
     parser.add_argument('--skip-install', action='store_true', default=False,
             help='Do not execute install target')
@@ -100,6 +106,16 @@ if __name__ == '__main__':
             target_versions.append((int(cur_version[0]), int(cur_version[1])))
         except (ValueError, IndexError):
             print_usage('[-] Invalid version format, expected something like "6.5"')
+
+    # Unix specific sanity checks
+    if args.platform == 'unix':
+        if len(target_versions) > 1:
+            print_usage(
+                '[-] On unix-like platforms, due to linkage against IDA directly, only '
+                'a single target is allowed per invocation.'
+            )
+        if not args.idaq_path:
+            print_usage('[-] On unix-like platforms, --idaq-path is required.')
 
     #
     # Find tools
@@ -125,16 +141,23 @@ if __name__ == '__main__':
 
 
             # Run cmake
-            cmake_cmd = [cmake_bin,
-                '-Dida_sdk=' + os.path.join(args.ida_sdks_path, 'idasdk{}{}'.format(*cur_target)),
+            cmake_cmd = [
+                cmake_bin,
+                '-DIDA_SDK=' + os.path.join(args.ida_sdks_path, 'idasdk{}{}'.format(*cur_target)),
                 '-G', get_cmake_gen(args.platform, cur_target),
                 '-DIDA_INSTALL_DIR:PATH=../dist/IDA-{}.{}'.format(*cur_target),
-                '-DIDA_VERSION={}{}0'.format(*cur_target)
-                ] + args.cmake_args + ['..'] + (
-                    ['-DIDA_ARCH_64=TRUE'] if arch == 64 else []
-                )
-            print 'Cmake command:'
-            print ' '.join("'%s'" % x if ' ' in x else x for x in cmake_cmd)
+                '-DIDA_VERSION={}{}0'.format(*cur_target),
+            ]
+
+            if args.idaq_path:
+                cmake_cmd.append('-DIDA_INSTALL_DIR=' + args.idaq_path)
+            if arch == 64:
+                cmake_cmd.append('-DIDA_ARCH_64=TRUE')
+
+            cmake_cmd.append('..')
+
+            print('Cmake command:')
+            print(' '.join("'%s'" % x if ' ' in x else x for x in cmake_cmd))
 
             proc = Popen(cmake_cmd, cwd=build_dir)
             if proc.wait() != 0:
