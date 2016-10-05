@@ -143,7 +143,11 @@ if (WIN32)
     endif ()
 elseif (UNIX)
     # On unixoid platforms, we link against IDA directly.
-    find_library(IDA_IDA_LIBRARY NAMES "ida" PATHS ${IDA_INSTALL_DIR} REQUIRED)
+    if (IDA_ARCH_64)
+        find_library(IDA_IDA_LIBRARY NAMES "ida64" PATHS ${IDA_INSTALL_DIR} REQUIRED)
+    else ()
+        find_library(IDA_IDA_LIBRARY NAMES "ida" PATHS ${IDA_INSTALL_DIR} REQUIRED)
+    endif ()
     list(APPEND ida_libraries ${IDA_IDA_LIBRARY})
 endif ()
 
