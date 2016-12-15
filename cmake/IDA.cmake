@@ -2,17 +2,17 @@
 # The MIT License (MIT)
 #
 # Copyright (c) 2015 athre0z
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -116,7 +116,7 @@ endif ()
 
 # IDA target architecture specific
 if (IDA_ARCH_64)
-    set(ida_lib_path_arch "64")
+    set(ida_lib_path_arch "32") #IDA need to use lib32 to link for x64
     set(arch_specific "-D__EA64__")
 else ()
     set(ida_lib_path_arch "32")
@@ -127,6 +127,13 @@ set(IDA_LIB_DIR "${ida_sdk}/lib/x86_${ida_lib_path_platform}_${ida_lib_path_comp
 message(STATUS "IDA library path: ${IDA_LIB_DIR}")
 if (NOT EXISTS ${IDA_LIB_DIR})
     set(IDA_LIB_DIR, NOTFOUND)
+endif ()
+
+set(IDA_DIR "${ida_dir_env}"
+    CACHE PATH "IDA path" FORCE)
+message(STATUS "IDA path: ${IDA_DIR}")
+if (NOT EXISTS ${IDA_DIR})
+    set(IDA_DIR, NOTFOUND)
 endif ()
 
 set(plugin_extension "${plugin_extension}" CACHE INTERNAL "Plugin file extension" FORCE)
@@ -149,7 +156,11 @@ elseif (UNIX OR APPLE)
     # We hardwire the path here as the lib lacks the "lib" prefix, making
     # find_library ignoring it.
     list(APPEND ida_libraries  "${IDA_LIB_DIR}/pro.a")
-    find_library(IDA_IDA_LIBRARY NAMES "ida" PATHS ${IDA_LIB_DIR} REQUIRED)
+    if (IDA_ARCH_64)
+        find_library(IDA_IDA_LIBRARY NAMES "ida64" PATHS ${IDA_DIR} REQUIRED)
+    else ()
+        find_library(IDA_IDA_LIBRARY NAMES "ida" PATHS ${IDA_DIR} REQUIRED)
+    endif()
     list(APPEND ida_libraries ${IDA_IDA_LIBRARY})
 endif ()
 set(ida_libraries ${ida_libraries} CACHE INTERNAL "IDA libraries" FORCE)
@@ -157,7 +168,7 @@ include_directories("${ida_sdk}/include")
 
 if (ida_dir)
     set(PLUGIN_INSTALL_PREFIX "${ida_dir}" CACHE STRING "Customizable install prefix")
-    set(CMAKE_INSTALL_PREFIX "${PLUGIN_INSTALL_PREFIX}" CACHE STRING 
+    set(CMAKE_INSTALL_PREFIX "${PLUGIN_INSTALL_PREFIX}" CACHE STRING
         "(see PLUGIN_INSTALL_PREFIX)" FORCE)
 
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
@@ -185,11 +196,11 @@ function (add_ida_plugin plugin_name)
     install(TARGETS ${plugin_name} DESTINATION plugins)
 
     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-        # When generating for Visual Studio, 
+        # When generating for Visual Studio,
         # generate user file for convenient debugging support.
         configure_file(
-            "cmake/template.vcxproj.user" 
-            "${plugin_name}.vcxproj.user" 
+            "cmake/template.vcxproj.user"
+            "${plugin_name}.vcxproj.user"
             @ONLY)
     endif ()
 endfunction (add_ida_plugin)
