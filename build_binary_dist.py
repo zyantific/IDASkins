@@ -145,7 +145,7 @@ if __name__ == '__main__':
                 cmake_bin,
                 '-DIDA_SDK=' + os.path.join(args.ida_sdks_path, 'idasdk{}{}'.format(*cur_target)),
                 '-G', get_cmake_gen(args.platform, cur_target),
-                '-DIDA_INSTALL_DIR:PATH=../dist/IDA-{}.{}'.format(*cur_target),
+                '-DPLUGIN_INSTALL_PREFIX:PATH=../dist/IDA-{}.{}'.format(*cur_target),
                 '-DIDA_VERSION={}{}0'.format(*cur_target),
             ]
 

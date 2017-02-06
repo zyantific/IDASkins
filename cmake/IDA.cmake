@@ -154,7 +154,7 @@ elseif (UNIX)
     # It might be possible to get this to work also on linux by parameterizing the file suffix.
     if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         foreach(qtlib Gui;Core;Widgets)
-            file(GLOB_RECURSE qtlibpaths "${IDA_INSTALL_DIR}/Qt${qtlib}")
+            file(GLOB_RECURSE qtlibpaths "${IDA_INSTALL_DIR}/../Frameworks/Qt${qtlib}")
             # Typically we will find exactly 2 paths to the libfile on macOS because of 
             # how the framework versioning works. Either one is fine, so pick the first.
             foreach(p ${qtlibpaths})
