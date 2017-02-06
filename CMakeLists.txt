@@ -80,6 +80,12 @@ if (IDA_VERSION LESS 690)
     target_link_libraries(${CMAKE_PROJECT_NAME} Qt4::QtCore Qt4::QtGui)
 else ()
     target_link_libraries(${CMAKE_PROJECT_NAME} Qt5::Widgets)
+    # On macs, we need to link to the frameworks in the IDA application folder
+    if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+        foreach (qtlib Widgets;Gui;Core)
+            set_target_properties(Qt5::${qtlib} PROPERTIES IMPORTED_LOCATION_RELEASE "${IDA_Qt${qtlib}_LIBRARY}")
+        endforeach()
+    endif ()
 endif ()
 
 install(DIRECTORY skin/ DESTINATION skin)
