@@ -6,7 +6,7 @@
 
     The MIT License (MIT)
 
-    Copyright (c) 2016 athre0z
+    Copyright (c) 2017 Joel Höner <athre0z@zyantific.com>
     
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -145,8 +145,8 @@ if __name__ == '__main__':
                 cmake_bin,
                 '-DIDA_SDK=' + os.path.join(args.ida_sdks_path, 'idasdk{}{}'.format(*cur_target)),
                 '-G', get_cmake_gen(args.platform, cur_target),
-                '-DPLUGIN_INSTALL_PREFIX:PATH=../dist/IDA-{}.{}'.format(*cur_target),
-                '-DIDA_VERSION={}{}0'.format(*cur_target),
+                '-DCMAKE_INSTALL_PREFIX:PATH=../dist/IDA-{}.{}'.format(*cur_target),
+                '-DIDA_VERSION={}{:02}'.format(*cur_target),
             ]
 
             if args.idaq_path:

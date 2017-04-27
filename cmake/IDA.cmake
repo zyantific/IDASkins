@@ -1,7 +1,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2016 athre0z
+# Copyright (c) 2017 Joel Höner <athre0z@zyantific.com>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -22,44 +22,26 @@
 # THE SOFTWARE.
 #
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.1)
 cmake_policy(SET CMP0054 NEW)
 
-option(IDA_ARCH_64 "Build for 64 bit IDA" False)
-set(IDA_SDK_PATH "" CACHE PATH "Path to IDA SDK")
-set(IDA_INSTALL_DIR "" CACHE PATH "Install path of IDA")
+# =============================================================================================== #
+# Overridable options                                                                             #
+# =============================================================================================== #
 
-# If variable has not been set, then set it with the environment variable
-function(set_var_from_env dst_var src_var env_var_name)
-    # Check if variable is already set
-    if (DEFINED ${dst_var})
-        message(STATUS "variable ${dst_var} was already set to \"${${dst_var}}\"")
-        RETURN()
-    endif()
+set(IDA_ARCH_64     False CACHE BOOL "Build for 64 bit IDA"                       )
+set(IDA_SDK_PATH    ""    CACHE PATH "Path to IDA SDK"                            )
+set(IDA_INSTALL_DIR ""    CACHE PATH "Install path of IDA"                        )
+set(IDA_VERSION     690   CACHE INT  "IDA Version to build for (e.g. 6.9 is 690).")
 
-    # Check if source variable set
-    message(STATUS "Checking ${src_var}, ${${src_var}}")
-    if (DEFINED ${src_var})
-        message(STATUS "Getting ${dst_var} value from source \"${src_var}\"")
-        set(${dst_var} ${${src_var}} PARENT_SCOPE)
-        RETURN()
-    endif()
-
-    # Check that environment variable was set
-    if (DEFINED ENV{${env_var_name}})
-        set(${dst_var} $ENV{${env_var_name}} PARENT_SCOPE)
-    else()
-        message(FATAL_ERROR "ENV variable \"${env_var_name}\" must be set")
-    endif()
-endfunction()
-
-set_var_from_env(IDA_SDK IDA_SDK_PATH IDASDK)
-set_var_from_env(ida_dir_env IDA_INSTALL_DIR IDADIR)
-file(TO_CMAKE_PATH "${ida_dir_env}" ida_dir)
+# =============================================================================================== #
+# General preparation                                                                             #
+# =============================================================================================== #
 
 # Compiler specific switches
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
-        "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" OR
+        "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
     set(compiler_specific "-m32 -std=c++0x ")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     set(compiler_specific "/WX /wd4996 /MP /D__VC__")
@@ -149,6 +131,31 @@ elseif (UNIX)
         find_library(IDA_IDA_LIBRARY NAMES "ida" PATHS ${IDA_INSTALL_DIR} REQUIRED)
     endif ()
     list(APPEND ida_libraries ${IDA_IDA_LIBRARY})
+endif ()
+
+set(ida_libraries ${ida_libraries} CACHE INTERNAL "IDA libraries" FORCE)
+include_directories("${IDA_SDK}/include")
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC" AND NOT IDA_INSTALL_DIR STREQUAL "")
+    # Normalize path.
+    file(TO_CMAKE_PATH ${IDA_INSTALL_DIR} ida_dir)
+    file(TO_NATIVE_PATH ${ida_dir} IDA_NATIVE_DIR)
+endif ()
+
+# =============================================================================================== #
+# Qt support                                                                                      #
+# =============================================================================================== #
+
+if (IDA_ENABLE_QT_SUPPORT)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+    # IDA 6.9 and above use Qt5, older versions Qt4.
+    if (IDA_VERSION LESS 690)
+        set(ida_qt_major 4)
+    else ()
+        set(ida_qt_major 5)
+    endif ()
 
     # On macOS, we can look up the path of each Qt library inside the IDA installation.
     # It might be possible to get this to work also on linux by parameterizing the file suffix.
@@ -163,19 +170,28 @@ elseif (UNIX)
             endforeach()
         endforeach()
     endif()
-    
+
+    # Locate Qt.
+    if (ida_qt_major EQUAL 4)
+        find_package(Qt4 REQUIRED QtCore QtGui)
+    else ()
+        find_package(Qt5Widgets REQUIRED)
+    endif ()
+
+    # Hack Qt to use release libraries even when generating debug binaries
+    # for compatibility with IDA.
+    get_cmake_property(all_vars VARIABLES)
+    foreach(cur_var ${all_vars})
+        string(REGEX MATCH "^(QT_.*LIBRARY)$" lib_match ${cur_var})
+        if (lib_match)
+            set(${lib_match} "${lib_match}_RELEASE")
+        endif()
+    endforeach()
 endif ()
 
-set(ida_libraries ${ida_libraries} CACHE INTERNAL "IDA libraries" FORCE)
-include_directories("${IDA_SDK}/include")
-
-set(PLUGIN_INSTALL_PREFIX "${ida_dir}" CACHE STRING "Customizable install prefix")
-set(CMAKE_INSTALL_PREFIX "${PLUGIN_INSTALL_PREFIX}" CACHE STRING 
-    "(see PLUGIN_INSTALL_PREFIX)" FORCE)
-
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    file(TO_NATIVE_PATH ${ida_dir} IDA_NATIVE_DIR)
-endif ()
+# =============================================================================================== #
+# Functions for adding IDA plugin targets                                                         #
+# =============================================================================================== #
 
 function (add_ida_plugin plugin_name)
     set(sources ${ARGV})
@@ -205,3 +221,59 @@ function (add_ida_plugin plugin_name)
             @ONLY)
     endif ()
 endfunction (add_ida_plugin)
+
+
+# =============================================================================================== #
+# Functions for adding IDA plugin targets with Qt support                                         #
+# =============================================================================================== #
+
+
+function (add_ida_qt_plugin plugin_name)
+    set(sources ${ARGV})
+    if (sources)
+        list(REMOVE_AT sources 0)
+    endif ()
+
+    # Divide between UI files and regular C/C++ sources. 
+    foreach (cur_file ${sources})
+        if (${cur_file} MATCHES ".*\\.ui")
+            list(APPEND ui_sources "${cur_file}")
+        else ()
+            list(APPEND non_ui_sources ${cur_file})
+        endif ()
+    endforeach ()
+
+    # Compile UI files.
+    if (ida_qt_major EQUAL 4)
+        QT4_WRAP_UI(form_headers ${ui_sources})
+    else ()
+        QT5_WRAP_UI(form_headers ${ui_sources})
+    endif ()
+
+    # Add plugin.
+    add_ida_plugin(${plugin_name} ${non_ui_sources} ${form_headers})
+
+    # Link against Qt.
+    if (ida_qt_major EQUAL 4)
+        foreach (qtlib Core;Gui)
+            target_link_libraries(${CMAKE_PROJECT_NAME} "Qt4::Qt${qtlib}")
+            # On macs, we need to link to the frameworks in the IDA application folder
+            if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+                set_target_properties(
+                    "Qt4::Qt${qtlib}" 
+                    PROPERTIES 
+                    IMPORTED_LOCATION_RELEASE "${IDA_Qt${qtlib}_LIBRARY}")
+            endif ()
+        endforeach()
+    else ()
+        foreach (qtlib Core;Widgets;Gui)
+            target_link_libraries(${CMAKE_PROJECT_NAME} "Qt5::${qtlib}")
+            if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+                set_target_properties(
+                    "Qt5::${qtlib}"
+                    PROPERTIES 
+                    IMPORTED_LOCATION_RELEASE "${IDA_Qt${qtlib}_LIBRARY}")
+            endif ()
+        endforeach()
+    endif ()
+endfunction ()
