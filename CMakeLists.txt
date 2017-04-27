@@ -26,7 +26,7 @@ cmake_minimum_required(VERSION 3.1)
 cmake_policy(SET CMP0054 NEW)
 project(IDASkins)
 
-set(IDA_ENABLE_QT_SUPPORT ON)
+set(IDA_ENABLE_QT_SUPPORT ON CACHE BOOL "")
 include("ida-cmake/cmake/IDA.cmake")
 
 set(headers
