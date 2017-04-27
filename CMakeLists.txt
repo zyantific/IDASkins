@@ -27,7 +27,7 @@ cmake_policy(SET CMP0054 NEW)
 project(IDASkins)
 
 set(IDA_ENABLE_QT_SUPPORT ON)
-include("cmake/IDA.cmake")
+include("ida-cmake/cmake/IDA.cmake")
 
 set(headers
     "src/Config.hpp"
