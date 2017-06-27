@@ -81,7 +81,8 @@ if (IDA_VERSION LESS 690)
 else ()
     target_link_libraries(${CMAKE_PROJECT_NAME} Qt5::Widgets)
     # On macs, we need to link to the frameworks in the IDA application folder
-    if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    # On Linux, we need to link to the specific libs in the IDA dir
+    if ((${CMAKE_SYSTEM_NAME} MATCHES "Darwin") OR (${CMAKE_SYSTEM_NAME} MATCHES "Linux"))
         foreach (qtlib Widgets;Gui;Core)
             set_target_properties(Qt5::${qtlib} PROPERTIES IMPORTED_LOCATION_RELEASE "${IDA_Qt${qtlib}_LIBRARY}")
         endforeach()

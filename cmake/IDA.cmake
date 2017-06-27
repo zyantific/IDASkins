@@ -151,7 +151,6 @@ elseif (UNIX)
     list(APPEND ida_libraries ${IDA_IDA_LIBRARY})
 
     # On macOS, we can look up the path of each Qt library inside the IDA installation.
-    # It might be possible to get this to work also on linux by parameterizing the file suffix.
     if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         foreach(qtlib Gui;Core;Widgets)
             file(GLOB_RECURSE qtlibpaths "${IDA_INSTALL_DIR}/../Frameworks/Qt${qtlib}")
@@ -161,9 +160,11 @@ elseif (UNIX)
                 set(IDA_Qt${qtlib}_LIBRARY ${p} CACHE FILEPATH "Path to IDA's Qt${qtlib}")
                 break()
             endforeach()
+    elseif (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        foreach(qtlib Gui;Core;Widgets)
+            set(IDA_Qt${qtlib}_LIBRARY ${IDA_INSTALL_DIR}/libQt5${qtlib}.so.5 CACHE FILEPATH "Path to IDA's Qt${qtlib}")
         endforeach()
     endif()
-    
 endif ()
 
 set(ida_libraries ${ida_libraries} CACHE INTERNAL "IDA libraries" FORCE)
