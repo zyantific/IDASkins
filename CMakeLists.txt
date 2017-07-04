@@ -54,4 +54,5 @@ set(forms
 # Add IDA plugin target
 include_directories("src")
 add_ida_qt_plugin(${CMAKE_PROJECT_NAME} ${headers} ${sources} ${forms})
+target_compile_options(${CMAKE_PROJECT_NAME} PUBLIC "-std=c++11")
 install(DIRECTORY skin/ DESTINATION skin)
