@@ -102,7 +102,7 @@ QTableCornerButton::section {
     background: #2D3234;
 
     /* dark-0 */
-    border: 2px outset #00000;
+    border: 2px outset #000000;
  }
 
 IDAView, hexview_t, CustomIDAMemo {
