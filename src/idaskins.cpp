@@ -62,9 +62,16 @@ int idaapi init()
 /**
  * @brief   Run callback for IDA.
  */
-void idaapi run(int /*arg*/)
+#if IDP_INTERFACE_VERSION >= 700
+    bool idaapi run(size_t)
+#else
+    void idaapi run(int)
+#endif
 {
     Core::instance().runPlugin();
+#if IDP_INTERFACE_VERSION >= 700
+    return true;
+#endif
 }
 
 /**

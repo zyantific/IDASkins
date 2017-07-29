@@ -31,7 +31,6 @@
 #include <QDir>
 #include <QApplication>
 #include <QMessageBox>
-#include <idp.hpp>
 #include <diskio.hpp>
 #include <kernwin.hpp>
 #include <loader.hpp>
@@ -143,7 +142,12 @@ void Core::preprocessStylesheet(QString &qss, const QString &themeDirPath)
     //msg("%s\n", qss.toAscii().data());
 }
 
-int Core::uiHook(void *userData, int notificationCode, va_list va)
+#if IDP_INTERFACE_VERSION >= 700
+ssize_t
+#else
+int
+#endif
+Core::uiHook(void *userData, int notificationCode, va_list va)
 {
     auto thiz = static_cast<Core*>(userData);
     Q_ASSERT(thiz);
