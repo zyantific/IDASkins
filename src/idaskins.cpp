@@ -24,11 +24,12 @@
 #include "Utils.hpp"
 #include "Settings.hpp"
 
-#include "Config.hpp"
+#include "PluginConfig.hpp"
 #include "Core.hpp"
 
 #include <QtGui>
 #include <QDockWidget>
+//#include <config.hpp>
 #include <ida.hpp>
 #include <idp.hpp>
 #include <loader.hpp>

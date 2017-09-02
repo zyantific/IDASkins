@@ -30,7 +30,7 @@ set(IDA_ENABLE_QT_SUPPORT ON CACHE BOOL "")
 include("ida-cmake/cmake/IDA.cmake")
 
 set(headers
-    "src/Config.hpp"
+    "src/PluginConfig.hpp"
     "src/Core.hpp"
     "src/IdaFontConfig.hpp"
     "src/Settings.hpp"

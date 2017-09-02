@@ -23,7 +23,7 @@
 
 #include "Core.hpp"
 
-#include "Config.hpp"
+#include "PluginConfig.hpp"
 #include "ThemeSelector.hpp"
 #include "Settings.hpp"
 #include "IdaFontConfig.hpp"
@@ -154,14 +154,21 @@ Core::uiHook(void *userData, int notificationCode, va_list va)
 
     switch (notificationCode)
     {
+#if IDP_INTERFACE_VERSION >= 700
+        case ui_preprocess_action:
+#else
         case ui_preprocess:
+#endif
         {
             const char *action = va_arg(va, const char*);
             if (::qstrcmp(action, "SetFont") == 0)
                 thiz->m_lastUiActionWasFontChange = true;
         } break;
-
+#if IDP_INTERFACE_VERSION >= 700
+        case ui_postprocess_action:
+#else
         case ui_postprocess:
+#endif
         {
             if (thiz->m_lastUiActionWasFontChange)
             {

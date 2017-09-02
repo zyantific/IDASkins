@@ -23,7 +23,7 @@
 
 #include "Settings.hpp"
 
-#include "Config.hpp"
+#include "PluginConfig.hpp"
 
 // ============================================================================================= //
 // [Settings]                                                                                    //
