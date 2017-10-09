@@ -31,7 +31,7 @@
 // [IdaFontConfig]                                                                               //
 // ============================================================================================= //
 
-class IdaFontConfig : private QSettings
+class IdaFontConfig
 {
 public:
     enum FontType
@@ -43,46 +43,17 @@ public:
         FONT_OUTPUT_WINDOW
     };
 public:
-    /**
-     * @brief   Default constructor.
-     */
     explicit IdaFontConfig(FontType type);
-    /**
-     * @brief   Destructor.
-     */
-    virtual ~IdaFontConfig();
 public:
-    QString family();
-    quint32 size  ();
-    bool    bold  ();
-    bool    italic();
-    //QString style ();
+    QString family() const;
+    int     size  () const;
+    bool    bold  () const;
+    bool    italic() const;
 protected:
-    QVariant getSetting(const QString &key);
     static const char *typeToSettingsKey(FontType type);
 protected:
-    FontType m_type;
+    const char* m_subkey;
 };
-
-// ============================================================================================= //
-// Implementation of inline functions [IdaFontConfig]                                            //
-// ============================================================================================= //
-
-inline QVariant IdaFontConfig::getSetting(const QString &key)
-{
-    beginGroup("Font");
-#   if IDA_SDK_VERSION >= 640
-    beginGroup(typeToSettingsKey(m_type));
-#   endif
-
-    auto tmp = value(key);
-
-#   if IDA_SDK_VERSION >= 640
-    endGroup();
-#   endif
-    endGroup();
-    return tmp;
-}
 
 // ============================================================================================= //
 

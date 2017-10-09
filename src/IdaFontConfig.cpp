@@ -23,86 +23,67 @@
 
 #include "IdaFontConfig.hpp"
 
-#include <QFont>
+#include <registry.hpp>
 #include <QFontInfo>
+#include <qfontdatabase.h>
 
 // ============================================================================================= //
 // [IdaFontConfig]                                                                               //
 // ============================================================================================= //
 
 IdaFontConfig::IdaFontConfig(FontType type)
-    : QSettings("Hex-Rays", "IDA")
-    , m_type(type)
+    : m_subkey(typeToSettingsKey(type))
 {
 
 }
 
-QString IdaFontConfig::family()
+QString IdaFontConfig::family() const
 {
-    auto x = getSetting("Name");
-    if (x.isValid())
-        return x.value<QString>();
+    qstring result;
+    if (reg_read_string(&result, "Name", m_subkey))
+        return QString(result.c_str());
 
+    // On Windows, HR doesn't use the system default font.
 #ifdef _WIN32
-    // On Windows, HR doesn't use the system's default monospace-font.
-    return "Fixedsys";
+    return "Consolas";
 #else
-    // It seems like there is no clean way of obtaining the name of the platform's default 
-    // monospace font in Qt4. This issue was addressed in Qt 5.2.
-    // TODO: for IDA >= 6.9, use Qt5 approach utilizing `QFontDatabase`.
-    QFont font("238ru<MGduz(asuidfz8AS)F0zEmguz234t");
-    font.setStyleHint(QFont::TypeWriter);
-    QFontInfo finfo(font);
-    return finfo.family();
+    return QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
 #endif
 }
 
-quint32 IdaFontConfig::size()
+int IdaFontConfig::size() const
 {
-    auto x = getSetting("Size");
-    return x.isValid() ? x.value<quint32>() : 10;
+    return reg_read_int("Size", 10, m_subkey);
 }
 
-bool IdaFontConfig::bold()
+bool IdaFontConfig::bold() const
 {
-    auto x = getSetting("Bold");
-    return x.isValid() ? x.value<bool>() : false;
+    return reg_read_bool("Bold", false, m_subkey);
 }
 
-bool IdaFontConfig::italic()
+bool IdaFontConfig::italic() const
 {
-    auto x = getSetting("Italic");
-    return x.isValid() ? x.value<bool>() : false;
+    return reg_read_bool("Italic", false, m_subkey);
 }
-
-//QString IdaFontConfig::style()
-//{
-//
-//}
 
 char const* IdaFontConfig::typeToSettingsKey(FontType type)
 {
     switch (type)
     {
         case FONT_DISASSEMBLY: 
-            return "Disassembly";
+            return "Font\\Disassembly";
         case FONT_HEXVIEW:
-            return "Hex view";
+            return "Font\\Hex view";
         case FONT_DEBUG_REGISTERS:
-            return "Debug registers";
+            return "Font\\Debug registers";
         case FONT_TEXT_INPUT:
-            return "Text input";
+            return "Font\\Text input";
         case FONT_OUTPUT_WINDOW:
-            return "Output window";
+            return "Font\\Output window";
     }
 
     Q_ASSERT(false);
     return nullptr;
-}
-
-IdaFontConfig::~IdaFontConfig()
-{
-
 }
 
 // ============================================================================================= //
