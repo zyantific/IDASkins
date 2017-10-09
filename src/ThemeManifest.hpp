@@ -32,6 +32,8 @@
 
 class ThemeManifest
 {
+    Q_DISABLE_COPY(ThemeManifest)
+
     QString m_themeName;
     QString m_themeAuthor;
     QString m_themeVersion;
@@ -41,22 +43,16 @@ public:
     ThemeManifest() {}
     ThemeManifest(const QString &manifestFilePath);
 public:
-    struct XInvalidManifest : public std::runtime_error
+    struct XInvalidManifest : std::runtime_error
     {
         XInvalidManifest(const char *what) : std::runtime_error(what) {}
     };
 public:
-    // NOTE: setters not required, yet. 
-    const QString& themeName() const                { return m_themeName;           }
-    void setThemeName(const QString &themeName)     { m_themeName = themeName;      }
-    const QString& themeAuthor() const              { return m_themeAuthor;         }
-    void setThemeAuthor(const QString &author)      { m_themeAuthor = author;       }
-    const QString& themeVersion() const             { return m_themeVersion;        }
-    void setThemeVersion(const QString &version)    { m_themeVersion = version;     }
-    const QString& themePreviewImage() const        { return m_themePreviewImage;   }
-    void setThemePreviewImage(const QString &image) { m_themePreviewImage = image;  }
-    const QString& themeNotes() const               { return m_themeNotes;          }
-    void setThemeNotes(const QString &notes)        { m_themeNotes = notes;         }
+    const QString& themeName        () const { return m_themeName;           }
+    const QString& themeAuthor      () const { return m_themeAuthor;         }
+    const QString& themeVersion     () const { return m_themeVersion;        }
+    const QString& themePreviewImage() const { return m_themePreviewImage;   }
+    const QString& themeNotes       () const { return m_themeNotes;          }
 public:
     /**
      * @brief   Parses a given manifest file.
@@ -64,8 +60,6 @@ public:
      * @throws  XInvalidManifest    If manifest file is invalid.
      */
     void parseFile(const QString &manifestFilePath);
-
-    Q_DISABLE_COPY(ThemeManifest);
 };
 
 // ============================================================================================= //

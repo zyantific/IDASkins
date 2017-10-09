@@ -33,9 +33,6 @@
 class Settings : public QSettings
 {
 public:
-    /**
-     * @brief   Default constructor.
-     */
     Settings();
     virtual ~Settings();
 public:
