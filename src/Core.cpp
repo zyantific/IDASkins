@@ -23,7 +23,7 @@
 
 #include "Core.hpp"
 
-#include "Config.hpp"
+#include "PluginConfig.hpp"
 #include "ThemeSelector.hpp"
 #include "Settings.hpp"
 #include "IdaFontConfig.hpp"
@@ -31,7 +31,6 @@
 #include <QDir>
 #include <QApplication>
 #include <QMessageBox>
-#include <idp.hpp>
 #include <diskio.hpp>
 #include <kernwin.hpp>
 #include <loader.hpp>
@@ -143,21 +142,33 @@ void Core::preprocessStylesheet(QString &qss, const QString &themeDirPath)
     //msg("%s\n", qss.toAscii().data());
 }
 
-int Core::uiHook(void *userData, int notificationCode, va_list va)
+#if IDP_INTERFACE_VERSION >= 700
+ssize_t
+#else
+int
+#endif
+Core::uiHook(void *userData, int notificationCode, va_list va)
 {
     auto thiz = static_cast<Core*>(userData);
     Q_ASSERT(thiz);
 
     switch (notificationCode)
     {
+#if IDP_INTERFACE_VERSION >= 700
+        case ui_preprocess_action:
+#else
         case ui_preprocess:
+#endif
         {
             const char *action = va_arg(va, const char*);
             if (::qstrcmp(action, "SetFont") == 0)
                 thiz->m_lastUiActionWasFontChange = true;
         } break;
-
+#if IDP_INTERFACE_VERSION >= 700
+        case ui_postprocess_action:
+#else
         case ui_postprocess:
+#endif
         {
             if (thiz->m_lastUiActionWasFontChange)
             {

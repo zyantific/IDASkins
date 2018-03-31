@@ -41,15 +41,19 @@ QTabBar::tab:selected {
     background-color: #777777;
 }
 
-QHeaderView::section {
-    background-color: #444;
-    border-left: 3px solid #666;
-}
-
 QTableView {
     border: 1px solid #474747;
-    background-color: #2d2d2d;
-    
+    background-color: #2d2d2d;   
+}
+
+QHeaderView::section {
+    background-color: #444;
+    border: none;
+    border-left: 1px solid #666;
+    border-right: 1px solid #333;
+    padding-top: 3px;
+    padding-left: 4px;
+    min-height: 20px;
 }
 
 QTableCornerButton::section {

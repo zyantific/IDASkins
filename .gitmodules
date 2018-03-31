@@ -1,0 +1,3 @@
+[submodule "ida-cmake"]
+	path = ida-cmake
+	url = https://github.com/zyantific/ida-cmake.git

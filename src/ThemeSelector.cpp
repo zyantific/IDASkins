@@ -24,13 +24,11 @@
 #include "ThemeSelector.hpp"
 
 #include "Utils.hpp"
-#include "ThemeManifest.hpp"
-#include "Config.hpp"
 #include "ObjectInspector.hpp"
+#include "PluginConfig.hpp"
 
 #include <memory>
 #include <QPixmap>
-#include <ida.hpp>
 #include <idp.hpp>
 #include "Core.hpp"
 

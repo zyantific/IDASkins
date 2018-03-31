@@ -30,6 +30,7 @@
 
 #include <QObject>
 #include <ida.hpp>
+#include <idp.hpp>
 
 // ============================================================================================= //
 // [Core]                                                                                        //
@@ -101,7 +102,13 @@ protected:
      * @param   va                  The variable arguments.
      * @return  Always 0.
      */
-    static int idaapi uiHook(void *userData, int notificationCode, va_list va);
+    static
+#if IDP_INTERFACE_VERSION >= 700
+    ssize_t
+#else
+    int
+#endif
+    idaapi uiHook(void *user_data, int notification_code, va_list va);
 protected slots:
     /**
      * @brief   Signal emitted when a theme selection was accepted in

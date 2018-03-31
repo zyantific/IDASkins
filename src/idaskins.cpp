@@ -24,11 +24,12 @@
 #include "Utils.hpp"
 #include "Settings.hpp"
 
-#include "Config.hpp"
+#include "PluginConfig.hpp"
 #include "Core.hpp"
 
 #include <QtGui>
 #include <QDockWidget>
+//#include <config.hpp>
 #include <ida.hpp>
 #include <idp.hpp>
 #include <loader.hpp>
@@ -62,9 +63,16 @@ int idaapi init()
 /**
  * @brief   Run callback for IDA.
  */
-void idaapi run(int /*arg*/)
+#if IDP_INTERFACE_VERSION >= 700
+    bool idaapi run(size_t)
+#else
+    void idaapi run(int)
+#endif
 {
     Core::instance().runPlugin();
+#if IDP_INTERFACE_VERSION >= 700
+    return true;
+#endif
 }
 
 /**
