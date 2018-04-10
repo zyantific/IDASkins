@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>528</width>
+    <width>612</width>
     <height>321</height>
    </rect>
   </property>
@@ -127,6 +127,36 @@
            </property>
            <property name="textFormat">
             <enum>Qt::RichText</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="lblClrPath">
+           <property name="text">
+            <string>CLR File:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="leClrPathVal">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0" colspan="2">
+          <widget class="QLabel" name="lblInstallInstr">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Skins and text color themes (.clr) have to be applied seperately. If included, after choosing a skin copy the above path and go to Options -> Colors -> Import to apply color theme.</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
