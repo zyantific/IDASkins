@@ -44,6 +44,7 @@ ThemeSelector::ThemeSelector(QWidget *parent)
     connect(m_widgets.lwSkinSelection, SIGNAL(itemSelectionChanged()), SLOT(themeSelected()));
     connect(m_widgets.btnObjectInspector, SIGNAL(clicked()), 
         &Core::instance(), SLOT(openObjectInspector()));
+    connect(m_widgets.leClrPathVal, SIGNAL(selectionChanged()), this, SLOT(clrPathSelectionChanged()));
     refresh();
 }
 
@@ -79,6 +80,16 @@ void ThemeSelector::refresh()
     m_curThemeList = std::move(themes);
 }
 
+void ThemeSelector::clrPathSelectionChanged()
+{
+    if(!settingSelection)
+    {
+        settingSelection = true;
+        m_widgets.leClrPathVal->selectAll();
+        settingSelection = false;
+    }
+}
+
 void ThemeSelector::themeSelected()
 {
     Q_ASSERT(m_curThemeList);
@@ -91,6 +102,11 @@ void ThemeSelector::themeSelected()
     m_widgets.lblAuthorVal->setText(entry.second->themeAuthor());
     m_widgets.lblVersionVal->setText(entry.second->themeVersion());
     m_widgets.lblNotesVal->setText(entry.second->themeNotes());
+
+    // Find first CLR file in theme dir
+    auto clrFiles = entry.first.entryList(QStringList()<<"*.clr", QDir::Files);
+    m_widgets.leClrPathVal->setText(clrFiles.begin() != clrFiles.end() ? QDir::toNativeSeparators(entry.first.absolutePath() + "/" + *clrFiles.begin()) : "");
+    m_widgets.leClrPathVal->selectAll();
 
     if (!entry.second->themePreviewImage().isEmpty())
     {

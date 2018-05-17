@@ -44,6 +44,7 @@ class ThemeSelector : public QDialog
     Ui::ThemeSelector m_widgets;
     std::unique_ptr<ThemeList> m_curThemeList;
     QPixmap m_curPreviewImage;
+    bool settingSelection;
 public:
     /**
      * @brief   Constructor.
@@ -64,6 +65,10 @@ protected slots:
      * @brief   Slot emitted when a theme was selected.
      */
     void themeSelected();
+    /**
+     * @brief   Reselects CLR path if unselected.
+     */
+    void clrPathSelectionChanged();
 public slots:
     void resizeEvent(QResizeEvent *event) override;
 private:
