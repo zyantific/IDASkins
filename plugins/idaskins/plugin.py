@@ -1,19 +1,22 @@
-from __future__ import absolute_import, print_function, division
+from __future__ import absolute_import, division, print_function
 
-import idaapi
 import os
 
-from idaskins.settings import Settings
-from idaskins.objectinspector import ObjectInspector
-from idaskins.themeselector import ThemeSelector
+import idaapi
 from idaskins.idafontconfig import IdaFontConfig
-
-from PyQt5.QtWidgets import QMessageBox
+from idaskins.objectinspector import ObjectInspector
+from idaskins.settings import Settings
+from idaskins.themeselector import ThemeSelector
 from PyQt5.Qt import qApp
 from PyQt5.QtCore import QObject
+from PyQt5.QtWidgets import QMessageBox
 
 
 class UiHooks(idaapi.UI_Hooks):
+    """
+    UI hooks. Currently only used to display a warning when
+    switching font settings in IDA.
+    """
     def __init__(self):
         super(UiHooks, self).__init__()
         self._last_event = None
@@ -27,16 +30,17 @@ class UiHooks(idaapi.UI_Hooks):
             QMessageBox.warning(
                 qApp.activeWindow(),
                 "IDASkins",
-                "Please note that altering the font settings when IDASkins is loaded "
-                "may cause strange effects on font rendering. It is recommended to "
-                "restart IDA after making font-related changes in the settings to avoid "
-                "instability."
+                "Please note that altering the font settings when IDASkins "
+                "is loaded may cause strange effects on font rendering. It is "
+                "recommended to restart IDA after making font-related changes "
+                "in the settings to avoid instability."
             )
 
         return super(UiHooks, self).postprocess_action()
 
 
 class IdaSkinsPlugin(QObject, idaapi.plugin_t):
+    """Plugin entry point. Does most of the skinning magic."""
     flags = idaapi.PLUGIN_FIX
     comment = "Advanced IDA skinning"
 
@@ -45,10 +49,10 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
     wanted_hotkey = "Ctrl-Shift-S"
 
     def __init__(self, *args, **kwargs):
+        print("[IDASkins] v2.0 by athre0z (zyantific.com) loaded!")
+
         QObject.__init__(self, *args, **kwargs)
         idaapi.plugin_t.__init__(self)
-
-        print("[IDASkins] v2.0 by athre0z (zyantific.com) loaded!")
 
         # First start dialog.
         self._settings = Settings()
@@ -56,8 +60,8 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
             selection = QMessageBox.information(
                 qApp.activeWindow(),
                 "IDASkins: First start",
-                "IDASkins detected that this is you first IDA startup with this plugin "
-                "installed. Do you wish to select a theme now?",
+                "IDASkins detected that this is you first IDA startup with "
+                "this plugin installed. Do you wish to select a theme now?",
                 QMessageBox.Yes | QMessageBox.No,
             )
 

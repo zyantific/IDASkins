@@ -1,7 +1,9 @@
-from PyQt5.QtGui import QFontDatabase
-import idaapi
+from __future__ import absolute_import, division, print_function
+
 import os
 
+import idaapi
+from PyQt5.QtGui import QFontDatabase
 
 _type_key_table = {
     'disas': 'Font\\Disassembly',
@@ -13,6 +15,7 @@ _type_key_table = {
 
 
 class IdaFontConfig(object):
+    """Read access to IDA's (undocumented) font config."""
     def __init__(self, type):
         self._key = _type_key_table[type]
 

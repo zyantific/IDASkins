@@ -1,7 +1,6 @@
-from __future__ import absolute_import, print_function, division
+from __future__ import absolute_import, division, print_function
 
 from PyQt5.QtCore import QSettings
-
 
 SELECTED_THEME_DIR_KEY = 'selectedThemeDir'
 FIRST_START_KEY = 'firstStart'

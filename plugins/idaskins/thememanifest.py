@@ -1,9 +1,10 @@
-from __future__ import absolute_import, print_function, division
+from __future__ import absolute_import, division, print_function
 
 import json
 
 
 class ManifestError(Exception):
+    """Something is wrong with the manifest format."""
     pass
 
 
@@ -15,6 +16,7 @@ def _make_property(name):
 
 
 class ThemeManifest(object):
+    """Theme manifest. Read access to basic info about themes."""
     def __init__(self, file):
         try:
             self._data = json.load(file)

@@ -1,17 +1,16 @@
-from __future__ import absolute_import, print_function, division
+from __future__ import absolute_import, division, print_function
 
-from PyQt5.QtWidgets import QDialog, QFileSystemModel
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import Qt
-from PyQt5 import uic
-
-from idaskins import UI_DIR, THEMES_DIR
-from idaskins.thememanifest import ThemeManifest, ManifestError
-from idaskins.objectinspector import ObjectInspector
-import os
-import idaapi
 import json
+import os
 
+import idaapi
+from idaskins import THEMES_DIR, UI_DIR
+from idaskins.objectinspector import ObjectInspector
+from idaskins.thememanifest import ManifestError, ThemeManifest
+from PyQt5 import uic
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QDialog, QFileSystemModel
 
 Ui_ThemeSelector, ThemeSelectorBase = uic.loadUiType(
     os.path.join(UI_DIR, 'ThemeSelector.ui')
@@ -19,6 +18,7 @@ Ui_ThemeSelector, ThemeSelectorBase = uic.loadUiType(
 
 
 class ThemeSelector(ThemeSelectorBase):
+    """Theme selector dialog. Pick your poison."""
     def __init__(self, *args, **kwargs):
         super(ThemeSelector, self).__init__(*args, **kwargs)
         self.setModal(False)

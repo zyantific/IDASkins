@@ -1,11 +1,13 @@
-from PyQt5.QtWidgets import QWidget, QShortcut
-from PyQt5.QtGui import QKeySequence, QFont, QCursor
-from PyQt5.Qt import qApp
-from PyQt5.QtCore import Qt
-from PyQt5 import uic
-from idaskins import UI_DIR
+from __future__ import absolute_import, division, print_function
+
 import os
 
+from idaskins import UI_DIR
+from PyQt5 import uic
+from PyQt5.Qt import qApp
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QCursor, QFont, QKeySequence
+from PyQt5.QtWidgets import QShortcut, QWidget
 
 Ui_ObjectInspector, ObjectInspectorBase = uic.loadUiType(
     os.path.join(UI_DIR, 'ObjectInspector.ui')
@@ -13,6 +15,11 @@ Ui_ObjectInspector, ObjectInspectorBase = uic.loadUiType(
 
 
 class ObjectInspector(ObjectInspectorBase):
+    """
+    Rudimentary Qt object inspector.
+    Allows for easier finding of object names and classes
+    for usage in QSS stylesheets.
+    """
     def __init__(self, *args, **kwargs):
         super(ObjectInspector, self).__init__(*args, **kwargs)
 
