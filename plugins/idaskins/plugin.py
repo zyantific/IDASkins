@@ -3,13 +3,14 @@ from __future__ import absolute_import, division, print_function
 import os
 
 import idaapi
+from idaskins import IDA_DIR
 from idaskins.idafontconfig import IdaFontConfig
 from idaskins.objectinspector import ObjectInspector
 from idaskins.settings import Settings
 from idaskins.thememanifest import ThemeManifest, ManifestError
 from idaskins.themeselector import ThemeSelector
 from PyQt5.Qt import qApp
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QObject, QDir
 from PyQt5.QtWidgets import QMessageBox
 
 
@@ -79,8 +80,8 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
         self._ui_hooks.hook()
 
     def preprocess_stylesheet(self, qss, theme_dir):
-        qss = qss.replace('<IDADIR>', idaapi.idadir(None))
-        qss = qss.replace('<SKINDIR>', theme_dir)
+        qss = qss.replace('<IDADIR>', QDir.fromNativeSeparators(IDA_DIR))
+        qss = qss.replace('<SKINDIR>', QDir.fromNativeSeparators(theme_dir))
 
         def replace_keyword(x, keyword, kind):
             cfg = IdaFontConfig(kind)
