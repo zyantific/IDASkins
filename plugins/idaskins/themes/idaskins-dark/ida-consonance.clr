@@ -1,56 +1,56 @@
 [DISASM]
-000000	 //Instruction
-aaaaaa	 //Directive
-f3c5ff	 //Macro name
-7e6082	 //Register name
-666666	 //Other keywords
-ffffff	 //Dummy data name
-b9ebeb	 //Dummy code name
-b9ebeb	 //Dummy unexplored name
-bbecff	 //Hidden name
-c0c0c0	 //Library function name
-00d269	 //Local variable name
-00ff00	 //Regular data name
-3250d2	 //Regular code name
-4646ff	 //Regular unexplored name
-7faaff	 //Demangled name
-617c7c	 //Segment name
-3250d2	 //Imported name
-008080	 //Suspicious constant
-3734ff	 //Char in instruction
-c0c0c0	 //String in instruction
-595959	 //Number in instruction
-f3c5ff	 //Char in data
-ffaaff	 //String in data
-00d2ff	 //Number in data
-ffff00	 //Code reference
-0080ff	 //Data reference
-00d2ff	 //Code reference to tail
-00d69d	 //Data reference to tail
-7e07df	 //Automatic comment
-00d269	 //Regular comment
-00f379	 //Repeatable comment
-3250d2	 //Extra line
-ababab	 //Collapsed line
-adad73	 //Line prefix: library function
-fd5aff	 //Line prefix: regular function
-7fffff	 //Line prefix: instruction
-00ffaa	 //Line prefix: data
-00d2ff	 //Line prefix: unexplored
-ffaaff	 //Line prefix: externs
-00ffff	 //Line prefix: current item
-000000	 //Line prefix: current line
-2d2d2d	 //Punctuation
-32ade1	 //Opcode bytes
-ffff00	 //Manual operand
-666666	 //Error
-0000aa	 //Default color
-617c7c	 //Selected
-009d9d	 //Library function
-ff55ff	 //Regular function
-000000	 //Single instruction
-00aaff	 //Data bytes
-000000	 //Unexplored byte
+000000	 //
+aaaaaa	 //Default color
+f3c5ff	 //Regular comment
+7e6082	 //Repeatable comment
+666666	 //Automatic comment
+ffffff	 //Instruction
+b9ebeb	 //Dummy Data Name
+b9ebeb	 //Regular Data Name
+bbecff	 //Demangled Name
+c0c0c0	 //Punctuation
+00d269	 //Char constant in instruction
+00ff00	 //String constant in instruction
+3250d2	 //Numeric constant in instruction
+4646ff	 //Void operand
+7faaff	 //Code reference
+617c7c	 //Data reference
+3250d2	 //Code reference to tail byte
+008080	 //Data reference to tail byte
+3734ff	 //Error or problem
+c0c0c0	 //Line prefix
+595959	 //Binary line prefix bytes
+f3c5ff	 //Extra line
+ffaaff	 //Alternative operand
+00d2ff	 //Hidden name
+ffff00	 //Library function name
+0080ff	 //Local variable name
+00d2ff	 //Dummy code name
+00d69d	 //Assembler directive
+7e07df	 //Macro
+00d269	 //String constant in data directive
+00f379	 //Char constant in data directive
+3250d2	 //Numeric constant in data directive
+ababab	 //Keywords
+adad73	 //Register name
+fd5aff	 //Imported name
+7fffff	 //Segment name
+00ffaa	 //Dummy unknown name
+00d2ff	 //Regular code name
+ffaaff	 //Regular unknown name
+00ffff	 //Collapsed line
+000000	 //Max color number
+2d2d2d	 //Line prefix: library function
+32ade1	 //Line prefix: regular function
+ffff00	 //Line prefix: instruction
+666666	 //Line prefix: data
+0000aa	 //Line prefix: unexplored
+617c7c	 //Line prefix: externs
+009d9d	 //Line prefix: current item
+ff55ff	 //Line prefix: current line
+000000	 //Punctuation
+00aaff	 //Opcode bytes
+000000	 //Manual operand
 [NAVBAR]
 ffaa00	 //Library function
 00aaff	 //Regular function
@@ -64,16 +64,17 @@ ff00ff	 //External symbol
 0080ff	 //Address
 [DEBUG]
 ffd060	 //Current IP
-ffa0a0	 //Current IP (Enabled)
-408020	 //Current IP (Disabled)
-ffffcc	 //Current IP (Unavailible)
-000076	 //Address
-00ff00	 //Address (Enabled)
-004080	 //Address (Disabled)
-0080ff	 //Address (Unavailible)
+ffa0a0	 //Current IP (+ enabled breakpoint)
+408020	 //Current IP (+ disabled breakpoint)
+ffffcc	 //Default background
+000076	 //Address (+ enabled breakpoint)
+00ff00	 //Address (+ disabled breakpoint)
+004080	 //Current IP (+ unavailable breakpoint)
+0080ff	 //Address (+ unavailable breakpoint)
 000000	 //Registers
-ff0000	 //Registers (Changed)
-800080	 //Registers (Edited)
+ff0000	 //Registers (changed)
+800080	 //Registers (edited)
+808080	 //Registers (unavailable)
 [ARROW]
 34466c	 //Jump in current function
 dede00	 //Jump external to function
@@ -97,7 +98,18 @@ cb4300	 //Normal edge
 ffaaaa	 //Highlighted edge
 008ec6	 //Current edge
 [MISC]
-212121	 //Message text
-d4d4d4	 //Message background
+dddddd	 //Message text
+2d2d2d	 //Message background
 404080	 //Patched bytes
 0080ff	 //Unsaved changes
+[OTHER]
+00ffff	 //Highlight color
+e1ffff	 //Hint color
+[SYNTAX]
+ff0000	0	0	 //Keyword 1
+800080	0	0	 //Keyword 2
+0000ff	0	0	 //Keyword 3
+00008b	0	0	 //String
+006400	0	1	 //Comment
+ff0000	1	0	 //Preprocessor
+8b8b00	1	0	 //Number
