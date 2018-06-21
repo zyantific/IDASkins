@@ -30,3 +30,13 @@ Changelog
 
 ### 1.4.0 -> 1.4.1:
   - added support for IDA versions 6.9 and higher (Qt5)
+
+### 1.4.1 -> 2.0.0:
+  - rewrote the entire plugin in Python
+    - ditches the madness of cross platform building native IDA plugins
+  - the theme selector now displays the path of the color theme
+    recommended to use with the IDASkins theme (contributed by @tostercx)
+  - updated the "IDASkins dark" CLR file to skin the output window correctly
+  - use IDA's registry API instead of QSettings
+  - dropped support for any IDA version older than 7.0
+  - various minor bug-fixes
