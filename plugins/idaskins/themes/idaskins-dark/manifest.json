@@ -1,0 +1,8 @@
+{
+    "theme_name": "IDASkins dark",
+    "author": "athre0z",
+    "version": "v2.0",
+    "preview_image": "preview.png",
+    "notes": "Combine with idaConsonance text-color theme for maximum epicness!",
+    "clr_file": "ida-consonance.clr"
+}

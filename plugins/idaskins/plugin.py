@@ -39,7 +39,7 @@ class IdaSkinsPlugin(idaapi.plugin_t):
     wanted_hotkey = "Ctrl-Shift-S"
 
     def __init__(self, *args, **kwargs):
-        idaapi.msg("[IDASkins] v2.0 by athre0z (zyantific.com) loaded!\n")
+        print("[IDASkins] v2.0 by athre0z (zyantific.com) loaded!")
 
         # First start dialog.
         self._settings = Settings()
@@ -75,4 +75,4 @@ class IdaSkinsPlugin(idaapi.plugin_t):
         self.open_theme_selector()
 
     def term(self):
-        idaapi.msg("term() called!\n")
+        print("term() called!")
