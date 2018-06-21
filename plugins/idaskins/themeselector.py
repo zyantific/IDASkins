@@ -21,6 +21,8 @@ Ui_ThemeSelector, ThemeSelectorBase = uic.loadUiType(
 class ThemeSelector(ThemeSelectorBase):
     def __init__(self, *args, **kwargs):
         super(ThemeSelector, self).__init__(*args, **kwargs)
+        self.setModal(False)
+
         self._theme_list = []
         self._preview_pixmap = None
         self._obj_inspector = None
@@ -101,3 +103,11 @@ class ThemeSelector(ThemeSelectorBase):
     def resizeEvent(self, *args, **kwargs):
         super(ThemeSelector, self).resizeEvent(*args, **kwargs)
         self.update_preview()
+
+    @property
+    def selected_theme_dir(self):
+        sel_model = self._ui.lwSkinSelection.selectionModel()
+        sel_indices = sel_model.selectedIndexes()
+        if sel_indices:
+            theme_dir, _ = self._theme_list[sel_indices[0].row()]
+            return theme_dir

@@ -18,7 +18,7 @@ class Settings(object):
     @selected_theme_dir.setter
     def selected_theme_dir(self, v):
         assert isinstance(v, str)
-        self._settings.setValue(SELECTED_THEME_DIR_KEY)
+        self._settings.setValue(SELECTED_THEME_DIR_KEY, v)
 
     @property
     def first_start(self):

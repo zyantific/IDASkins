@@ -1,10 +1,14 @@
+from __future__ import absolute_import, print_function, division
+
 import idaapi
+import os
 
 from idaskins.settings import Settings
 from idaskins.objectinspector import ObjectInspector
 from idaskins.themeselector import ThemeSelector
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.Qt import qApp
+from PyQt5.QtCore import QObject
 
 
 class UiHooks(idaapi.UI_Hooks):
@@ -30,7 +34,7 @@ class UiHooks(idaapi.UI_Hooks):
         return super(UiHooks, self).postprocess_action()
 
 
-class IdaSkinsPlugin(idaapi.plugin_t):
+class IdaSkinsPlugin(QObject, idaapi.plugin_t):
     flags = idaapi.PLUGIN_FIX
     comment = "Advanced IDA skinning"
 
@@ -39,6 +43,9 @@ class IdaSkinsPlugin(idaapi.plugin_t):
     wanted_hotkey = "Ctrl-Shift-S"
 
     def __init__(self, *args, **kwargs):
+        QObject.__init__(self, *args, **kwargs)
+        idaapi.plugin_t.__init__(self)
+
         print("[IDASkins] v2.0 by athre0z (zyantific.com) loaded!")
 
         # First start dialog.
@@ -57,16 +64,56 @@ class IdaSkinsPlugin(idaapi.plugin_t):
 
             self._settings.first_start = False
 
-        # Init some vars.
         self._theme_selector = None
+        self.apply_stylesheet_from_settings()
 
         # Subscribe UI notifications.
         self._ui_hooks = UiHooks()
         self._ui_hooks.hook()
 
+    def preprocess_stylesheet(self, qss, theme_dir):
+        qss = qss.replace('<IDADIR>', idaapi.idadir(None))
+        qss = qss.replace('<SKINDIR>', theme_dir)
+
+        def replace_keyword(x, keyword, kind):
+            return x  # TODO
+
+        qss = replace_keyword(qss, 'DISASSEMBLY', 'xxx')
+        qss = replace_keyword(qss, 'HEXVIEW', 'xxx')
+        qss = replace_keyword(qss, 'DEBUG_REGISTERS', 'xxx')
+        qss = replace_keyword(qss, 'TEXT_INPUT', 'xxx')
+        qss = replace_keyword(qss, 'OUTPUT_WINDOW', 'xxx')
+
+        return qss
+
+    def apply_stylesheet(self, theme_dir):
+        print(os.path.join(theme_dir, 'stylesheet.qss'))
+        try:
+            with open(os.path.join(theme_dir, 'stylesheet.qss')) as f:
+                qss = f.read()
+        except IOError as exc:
+            print('[IDASkins] Unable to load stylesheet.')
+            return
+
+        qss = self.preprocess_stylesheet(qss, theme_dir)
+        qApp.setStyleSheet(qss)
+        #idaapi.request_refresh(idaapi.IWID_ALL)
+        print('[IDASkins] Skin file successfully applied!')
+
+    def apply_stylesheet_from_settings(self):
+        if self._settings.selected_theme_dir:
+            self.apply_stylesheet(self._settings.selected_theme_dir)
+
     def open_theme_selector(self):
-        self._theme_selector = ThemeSelector()
+        self._theme_selector = ThemeSelector(qApp.activeWindow())
+        self._theme_selector.accepted.connect(self.on_theme_selection_accepted)
         self._theme_selector.show()
+
+    def on_theme_selection_accepted(self):
+        theme_dir = self.sender().selected_theme_dir
+        if theme_dir:
+            self._settings.selected_theme_dir = theme_dir
+            self.apply_stylesheet_from_settings()
 
     def init(self):
         return idaapi.PLUGIN_KEEP
