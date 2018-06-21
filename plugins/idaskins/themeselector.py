@@ -9,6 +9,7 @@ from idaskins.objectinspector import ObjectInspector
 from idaskins.thememanifest import ManifestError, ThemeManifest
 from PyQt5 import uic
 from PyQt5.QtCore import Qt
+from PyQt5.Qt import qApp
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QDialog, QFileSystemModel
 
@@ -34,6 +35,9 @@ class ThemeSelector(ThemeSelectorBase):
         )
         self._ui.btnObjectInspector.clicked.connect(
             self.open_object_inspector
+        )
+        self._ui.btnCopyClr.clicked.connect(
+            self.on_copy_clr_clicked
         )
 
         self.refresh()
@@ -64,9 +68,7 @@ class ThemeSelector(ThemeSelectorBase):
         )
 
     def theme_selected(self):
-        sel_model = self._ui.lwSkinSelection.selectionModel()
-        sel_indices = sel_model.selectedIndexes()
-        theme_dir, manifest = self._theme_list[sel_indices[0].row()]
+        theme_dir, manifest = self._get_selected()
 
         self._ui.lblAuthorVal.setText(manifest.author)
         self._ui.lblVersionVal.setText(manifest.version)
@@ -83,6 +85,20 @@ class ThemeSelector(ThemeSelectorBase):
             self.update_preview()
         else:
             self._ui.lblPreview.setText('no preview available')
+
+    def _get_selected(self):
+        sel_model = self._ui.lwSkinSelection.selectionModel()
+        sel_indices = sel_model.selectedIndexes()
+        if sel_indices:
+            return self._theme_list[sel_indices[0].row()]
+        else:
+            return None, None
+
+    def on_copy_clr_clicked(self):
+        _, manifest = self._get_selected()
+        if not manifest.clr_file:
+            return
+        qApp.clipboard().setText(self._ui.leClrPathVal.text())
 
     def update_preview(self):
         if not self._preview_pixmap:
@@ -106,8 +122,5 @@ class ThemeSelector(ThemeSelectorBase):
 
     @property
     def selected_theme_dir(self):
-        sel_model = self._ui.lwSkinSelection.selectionModel()
-        sel_indices = sel_model.selectedIndexes()
-        if sel_indices:
-            theme_dir, _ = self._theme_list[sel_indices[0].row()]
-            return theme_dir
+        theme_dir, _ = self._get_selected()
+        return theme_dir
