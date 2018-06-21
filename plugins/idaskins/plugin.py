@@ -6,6 +6,8 @@ import os
 from idaskins.settings import Settings
 from idaskins.objectinspector import ObjectInspector
 from idaskins.themeselector import ThemeSelector
+from idaskins.idafontconfig import IdaFontConfig
+
 from PyQt5.QtWidgets import QMessageBox
 from PyQt5.Qt import qApp
 from PyQt5.QtCore import QObject
@@ -76,18 +78,25 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
         qss = qss.replace('<SKINDIR>', theme_dir)
 
         def replace_keyword(x, keyword, kind):
-            return x  # TODO
+            cfg = IdaFontConfig(kind)
+            prefix = '<{}_FONT_'.format(keyword)
 
-        qss = replace_keyword(qss, 'DISASSEMBLY', 'xxx')
-        qss = replace_keyword(qss, 'HEXVIEW', 'xxx')
-        qss = replace_keyword(qss, 'DEBUG_REGISTERS', 'xxx')
-        qss = replace_keyword(qss, 'TEXT_INPUT', 'xxx')
-        qss = replace_keyword(qss, 'OUTPUT_WINDOW', 'xxx')
+            x = x.replace(prefix + 'FAMILY>', cfg.family)
+            x = x.replace(prefix + 'STYLE>', ' italic' if cfg.italic else '')
+            x = x.replace(prefix + 'WEIGHT>', ' bold' if cfg.bold else '')
+            x = x.replace(prefix + 'SIZE>', '{} pt'.format(cfg.size))
+
+            return x
+
+        qss = replace_keyword(qss, 'DISASSEMBLY', 'disas')
+        qss = replace_keyword(qss, 'HEXVIEW', 'hexview')
+        qss = replace_keyword(qss, 'DEBUG_REGISTERS', 'debug_regs')
+        qss = replace_keyword(qss, 'TEXT_INPUT', 'text_input')
+        qss = replace_keyword(qss, 'OUTPUT_WINDOW', 'output_wnd')
 
         return qss
 
     def apply_stylesheet(self, theme_dir):
-        print(os.path.join(theme_dir, 'stylesheet.qss'))
         try:
             with open(os.path.join(theme_dir, 'stylesheet.qss')) as f:
                 qss = f.read()
