@@ -1,0 +1,8 @@
+{
+    "theme_name": "IDA-Dark by UNIS",
+    "author": "UNIS",
+    "version": "v1.0",
+    "preview_image": "preview.png",
+    "clr_file": "myColors.clr",
+    "qss_file": "stylesheet.qss"
+}

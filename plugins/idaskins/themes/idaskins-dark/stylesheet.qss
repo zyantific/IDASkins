@@ -1,4 +1,4 @@
-QWidget { 
+QWidget {
     background-color: #363636;
     color: #ddd;
 }
@@ -43,7 +43,7 @@ QTabBar::tab:selected {
 
 QTableView {
     border: 1px solid #474747;
-    background-color: #2d2d2d;   
+    background-color: #2d2d2d;
 }
 
 QHeaderView::section {
@@ -136,7 +136,7 @@ QPushButton:hover, QPushButton:default {
 }
 
 QPushButton:pressed {
-    border: 1px solid #0ee;   
+    border: 1px solid #0ee;
 }
 
 QComboBox {
@@ -199,7 +199,7 @@ QGroupBox::title {
 }
 
 /* Remove border from IDC/Python switch button */
-CLIWidget > QGroupBox > QPushButton, 
+CLIWidget > QGroupBox > QPushButton,
 CLIWidget > QGroupBox > QPushButton:hover,
 CLIWidget > QGroupBox > QPushButton:focus {
     border: none;

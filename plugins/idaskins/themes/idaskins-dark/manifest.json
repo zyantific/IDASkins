@@ -1,0 +1,8 @@
+{
+    "theme_name": "IDASkins dark",
+    "author": "athre0z",
+    "version": "v2.0",
+    "preview_image": "preview.png",
+    "clr_file": "ida-consonance.clr",
+    "qss_file": "stylesheet.qss"
+}
