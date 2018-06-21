@@ -6,6 +6,7 @@ import idaapi
 from idaskins.idafontconfig import IdaFontConfig
 from idaskins.objectinspector import ObjectInspector
 from idaskins.settings import Settings
+from idaskins.thememanifest import ThemeManifest, ManifestError
 from idaskins.themeselector import ThemeSelector
 from PyQt5.Qt import qApp
 from PyQt5.QtCore import QObject
@@ -100,9 +101,9 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
 
         return qss
 
-    def apply_stylesheet(self, theme_dir):
+    def apply_stylesheet(self, theme_dir, manifest):
         try:
-            with open(os.path.join(theme_dir, 'stylesheet.qss')) as f:
+            with open(os.path.join(theme_dir, manifest.qss_file)) as f:
                 qss = f.read()
         except IOError as exc:
             print('[IDASkins] Unable to load stylesheet.')
@@ -114,8 +115,17 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
         print('[IDASkins] Skin file successfully applied!')
 
     def apply_stylesheet_from_settings(self):
-        if self._settings.selected_theme_dir:
-            self.apply_stylesheet(self._settings.selected_theme_dir)
+        theme_dir = self._settings.selected_theme_dir
+        if theme_dir:
+            try:
+                manifest = ThemeManifest(open(os.path.join(
+                    theme_dir, 'manifest.json'
+                )))
+            except ManifestError as exc:
+                print('[IDASkins]', str(exc))
+                return
+
+            self.apply_stylesheet(theme_dir, manifest)
 
     def open_theme_selector(self):
         self._theme_selector = ThemeSelector(qApp.activeWindow())

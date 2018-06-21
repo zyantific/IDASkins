@@ -4,5 +4,6 @@
     "version": "v1.0",
     "preview_image": "preview.png",
     "notes": "Combine with idaConsonance text-color theme for maximum epicness!",
-    "clr_file": "myColors.clr"
+    "clr_file": "myColors.clr",
+    "qss_file": "stylesheet.qss"
 }

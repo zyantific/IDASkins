@@ -4,5 +4,6 @@
     "version": "v1.0",
     "preview_image": "preview.png",
     "notes": "Combine with Gnome3 adwaita theme and IDA Pro adwaita-dark color style",
-    "clr_file": "adwaita-dark.clr"
+    "clr_file": "adwaita-dark.clr",
+    "qss_file": "stylesheet.qss"
 }

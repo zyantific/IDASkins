@@ -2,5 +2,6 @@
     "theme_name": "IDA default",
     "author": "Hex-Rays",
     "version": "v1.0",
-    "clr_file": "ida-default.clr"
+    "clr_file": "ida-default.clr",
+    "qss_file": "stylesheet.qss"
 }
