@@ -47,7 +47,7 @@ class ThemeSelector(ThemeSelectorBase):
         try:
             self._theme_list = [
                 (
-                    os.path.join(THEMES_DIR, x),
+                    x,
                     ThemeManifest(open(
                         os.path.join(THEMES_DIR, x, 'manifest.json')
                     ),
@@ -69,18 +69,19 @@ class ThemeSelector(ThemeSelectorBase):
 
     def theme_selected(self):
         theme_dir, manifest = self._get_selected()
+        abs_theme_dir = os.path.join(THEMES_DIR, theme_dir)
 
         self._ui.lblAuthorVal.setText(manifest.author)
         self._ui.lblVersionVal.setText(manifest.version)
         self._ui.lblNotesVal.setText(manifest.notes)
         self._ui.leClrPathVal.setText(
-            os.path.join(theme_dir, manifest.clr_file)
+            os.path.join(abs_theme_dir, manifest.clr_file)
             if manifest.clr_file else
             None
         )
 
         if manifest.preview_image:
-            abs_path = os.path.join(theme_dir, manifest.preview_image)
+            abs_path = os.path.join(abs_theme_dir, manifest.preview_image)
             self._preview_pixmap = QPixmap(abs_path)
             self.update_preview()
         else:

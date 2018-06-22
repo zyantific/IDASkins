@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function
 import os
 
 import idaapi
-from idaskins import IDA_DIR
+from idaskins import IDA_DIR, THEMES_DIR
 from idaskins.idafontconfig import IdaFontConfig
 from idaskins.objectinspector import ObjectInspector
 from idaskins.settings import Settings
@@ -71,6 +71,13 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
                 self.open_theme_selector()
 
             self._settings.first_start = False
+        else:
+            # v2.0.0 used absolute pathes due to a bug.
+            # Fix settings from this particular version here.
+            theme_dir = self._settings.selected_theme_dir
+            if theme_dir and os.path.isabs(theme_dir):
+                print('[IDASkins] Updating buggy v2.0.0 theme path')
+                self._settings.selected_theme_dir = os.path.split(theme_dir)[-1]
 
         self._theme_selector = None
         self.apply_stylesheet_from_settings()
@@ -79,9 +86,9 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
         self._ui_hooks = UiHooks()
         self._ui_hooks.hook()
 
-    def preprocess_stylesheet(self, qss, theme_dir):
+    def preprocess_stylesheet(self, qss, abs_theme_dir):
         qss = qss.replace('<IDADIR>', QDir.fromNativeSeparators(IDA_DIR))
-        qss = qss.replace('<SKINDIR>', QDir.fromNativeSeparators(theme_dir))
+        qss = qss.replace('<SKINDIR>', QDir.fromNativeSeparators(abs_theme_dir))
 
         def replace_keyword(x, keyword, kind):
             cfg = IdaFontConfig(kind)
@@ -102,31 +109,32 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
 
         return qss
 
-    def apply_stylesheet(self, theme_dir, manifest):
+    def apply_stylesheet(self, abs_theme_dir, manifest):
         try:
-            with open(os.path.join(theme_dir, manifest.qss_file)) as f:
+            with open(os.path.join(abs_theme_dir, manifest.qss_file)) as f:
                 qss = f.read()
         except IOError as exc:
             print('[IDASkins] Unable to load stylesheet.')
             return
 
-        qss = self.preprocess_stylesheet(qss, theme_dir)
+        qss = self.preprocess_stylesheet(qss, abs_theme_dir)
         qApp.setStyleSheet(qss)
         #idaapi.request_refresh(idaapi.IWID_ALL)
         print('[IDASkins] Skin file successfully applied!')
 
     def apply_stylesheet_from_settings(self):
         theme_dir = self._settings.selected_theme_dir
+        abs_theme_dir = os.path.join(THEMES_DIR, theme_dir)
         if theme_dir:
             try:
                 manifest = ThemeManifest(open(os.path.join(
-                    theme_dir, 'manifest.json'
+                    abs_theme_dir, 'manifest.json'
                 )))
             except ManifestError as exc:
                 print('[IDASkins]', str(exc))
                 return
 
-            self.apply_stylesheet(theme_dir, manifest)
+            self.apply_stylesheet(abs_theme_dir, manifest)
 
     def open_theme_selector(self):
         self._theme_selector = ThemeSelector(qApp.activeWindow())
