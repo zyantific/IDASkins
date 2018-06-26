@@ -26,9 +26,7 @@ class IdaFontConfig(object):
             self._key,
             'Consolas'
             if os.name == 'nt' else 
-            'Menlo'
-            if sys.platform == 'darwin' else
-            QFontDatabase.systemFont(QFontDatabase.FixedFont).family()    
+            QFontDatabase.systemFont(QFontDatabase.FixedFont).family().encode()    
         )
 
     @property
