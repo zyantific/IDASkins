@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function
 
-import os
+import os, sys
 
 import idaapi
 from PyQt5.QtGui import QFontDatabase
@@ -25,8 +25,10 @@ class IdaFontConfig(object):
             'Name',
             self._key,
             'Consolas'
-            if os.name == 'nt' else
-            QFontDatabase.systemFont(QFontDatabase.FixedFont).family()
+            if os.name == 'nt' else 
+            'Menlo'
+            if sys.platform == 'darwin' else
+            QFontDatabase.systemFont(QFontDatabase.FixedFont).family()    
         )
 
     @property
