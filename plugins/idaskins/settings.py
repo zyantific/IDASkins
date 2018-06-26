@@ -12,7 +12,8 @@ class Settings(object):
 
     @property
     def selected_theme_dir(self):
-        return self._settings.value(SELECTED_THEME_DIR_KEY, None).encode()
+        theme_dir = self._settings.value(SELECTED_THEME_DIR_KEY, None)
+        return None if theme_dir is None else theme_dir.encode()
 
     @selected_theme_dir.setter
     def selected_theme_dir(self, v):

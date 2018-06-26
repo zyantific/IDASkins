@@ -124,8 +124,8 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
 
     def apply_stylesheet_from_settings(self):
         theme_dir = self._settings.selected_theme_dir
-        abs_theme_dir = os.path.join(THEMES_DIR, theme_dir)
         if theme_dir:
+            abs_theme_dir = os.path.join(THEMES_DIR, theme_dir)
             try:
                 manifest = ThemeManifest(open(os.path.join(
                     abs_theme_dir, 'manifest.json'
