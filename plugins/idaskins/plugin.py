@@ -62,8 +62,8 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
             selection = QMessageBox.information(
                 qApp.activeWindow(),
                 "IDASkins: First start",
-                "IDASkins detected that this is you first IDA startup with "
-                "this plugin installed. Do you wish to select a theme now?",
+                "IDASkins has detected that this is the first time you've started IDA with "
+                "the plugin installed. Select a theme now?",
                 QMessageBox.Yes | QMessageBox.No,
             )
 
