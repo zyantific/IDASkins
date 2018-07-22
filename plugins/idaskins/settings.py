@@ -23,7 +23,7 @@ class Settings(object):
     @property
     def first_start(self):
         # PyQt seems to be returning unicode strings instead of QVariant.
-        return self._settings.value(FIRST_START_KEY, True) != u'false'
+        return not self._settings.value(FIRST_START_KEY, True) in [u'false', False]
 
     @first_start.setter
     def first_start(self, v):
