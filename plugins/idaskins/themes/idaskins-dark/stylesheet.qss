@@ -131,6 +131,14 @@ QPushButton {
     border-radius: 2px;
 }
 
+nav_scroll_button_t {
+    border: default;
+    min-height: default;
+    min-width: default;
+    padding: default;
+    border-radius: default;
+}
+
 QPushButton:hover, QPushButton:default {
     border: 1px solid #0aa;
 }
