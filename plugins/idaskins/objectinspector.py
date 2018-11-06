@@ -60,11 +60,13 @@ class ObjectInspector(ObjectInspectorBase):
             self._ui.teInspectionResults.setText((
                 "Type: {}\n"
                 "Name: {}\n"
-                "Number of children: {}"
+                "Number of children: {}\n"
+                "QSS: {}"
             ).format(
                 widget.metaObject().className(),
                 widget.objectName() or '<none>',
                 len(widget.children()),
+                widget.styleSheet() or '<none>',
             ))
 
             self._selected_widget.destroyed.connect(
