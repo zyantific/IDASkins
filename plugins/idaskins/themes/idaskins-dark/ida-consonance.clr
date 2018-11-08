@@ -66,7 +66,7 @@ ff00ff	 //External symbol
 ffd060	 //Current IP
 ffa0a0	 //Current IP (+ enabled breakpoint)
 408020	 //Current IP (+ disabled breakpoint)
-ffffcc	 //Default background
+2d2d2d	 //Default background
 000076	 //Address (+ enabled breakpoint)
 00ff00	 //Address (+ disabled breakpoint)
 004080	 //Current IP (+ unavailable breakpoint)
