@@ -51,7 +51,7 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
     wanted_hotkey = "Ctrl-Shift-S"
 
     def __init__(self, *args, **kwargs):
-        print("[IDASkins] v2.0 by athre0z (zyantific.com) loaded!")
+        print("[IDASkins] v2.0.4 by athre0z (zyantific.com) loaded!")
 
         QObject.__init__(self, *args, **kwargs)
         idaapi.plugin_t.__init__(self)
