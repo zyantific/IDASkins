@@ -9,6 +9,7 @@ from idaskins.objectinspector import ObjectInspector
 from idaskins.settings import Settings
 from idaskins.thememanifest import ThemeManifest, ManifestError
 from idaskins.themeselector import ThemeSelector
+from idaskins.clrapplier import load_clr_file
 from PyQt5.Qt import qApp
 from PyQt5.QtCore import QObject, QDir
 from PyQt5.QtWidgets import QMessageBox
@@ -120,7 +121,9 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
         qss = self.preprocess_stylesheet(qss, abs_theme_dir)
         qApp.setStyleSheet(qss)
         #idaapi.request_refresh(idaapi.IWID_ALL)
-        print('[IDASkins] Skin file successfully applied!')
+
+    def apply_clr_file(self, abs_theme_dir, manifest):
+        load_clr_file(os.path.join(abs_theme_dir, manifest.clr_file))
 
     def apply_stylesheet_from_settings(self):
         theme_dir = self._settings.selected_theme_dir
@@ -135,6 +138,8 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
                 return
 
             self.apply_stylesheet(abs_theme_dir, manifest)
+            self.apply_clr_file(abs_theme_dir, manifest)
+            print('[IDASkins] Skin file successfully applied!')
 
     def open_theme_selector(self):
         self._theme_selector = ThemeSelector(qApp.activeWindow())
