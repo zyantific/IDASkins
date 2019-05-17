@@ -103,8 +103,8 @@ dddddd	 //Message text
 404080	 //Patched bytes
 0080ff	 //Unsaved changes
 [OTHER]
-00ffff	 //Highlight color
-e1ffff	 //Hint color
+1f005e   //Highlight color
+424242   //Hint color
 [SYNTAX]
 ff0000	0	0	 //Keyword 1
 800080	0	0	 //Keyword 2
