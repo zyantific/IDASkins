@@ -123,7 +123,11 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
         #idaapi.request_refresh(idaapi.IWID_ALL)
 
     def apply_clr_file(self, abs_theme_dir, manifest):
-        load_clr_file(os.path.join(abs_theme_dir, manifest.clr_file))
+        try:
+            load_clr_file(os.path.join(abs_theme_dir, manifest.clr_file))
+        except IOError as exc:
+            print('[IDASkins] Unable to load clr file.')
+            return
 
     def apply_stylesheet_from_settings(self):
         theme_dir = self._settings.selected_theme_dir

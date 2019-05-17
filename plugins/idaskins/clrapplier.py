@@ -2,12 +2,12 @@ from __future__ import absolute_import, division, print_function
 
 import os
 import sys
+import ctypes
 
 import idaapi
 import idc
 
-from ctypes import (c_int, c_void_p, create_string_buffer,
-                    cast, WINFUNCTYPE, CFUNCTYPE, WinDLL, CDLL)
+from ctypes import (c_int, c_void_p, create_string_buffer, cast)
 from PyQt5.QtCore import Qt, QTimer, QObject
 from PyQt5.QtGui import QResizeEvent, QFocusEvent
 from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QPushButton, qApp
@@ -18,14 +18,14 @@ __all__ = ['load_clr_file']
 def _ida_lib():
     ea_name = 'ida64' if idc.__EA64__ else 'ida'
     if sys.platform == 'win32':
-        functype = WINFUNCTYPE
-        lib = WinDLL(ea_name)
+        functype = ctypes.WINFUNCTYPE
+        lib = ctypes.WinDLL(ea_name)
     elif sys.platform == 'darwin':
-        functype = CFUNCTYPE
-        lib = CDLL(idaapi.idadir("lib" + ea_name + ".dylib"))
+        functype = ctypes.CFUNCTYPE
+        lib = ctypes.CDLL(idaapi.idadir("lib" + ea_name + ".dylib"))
     else:
-        functype = CFUNCTYPE
-        lib = CDLL('lib' + ea_name + '.so')
+        functype = ctypes.CFUNCTYPE
+        lib = ctypes.CDLL('lib' + ea_name + '.so')
     return functype, lib
 
 
@@ -51,7 +51,8 @@ class TemporaryFilter(QObject):
     def __init__(self, filepath):
         super(TemporaryFilter, self).__init__()
         filepath = os.path.abspath(filepath)
-        assert os.path.isfile(filepath)
+        if not os.path.isfile(filepath):
+            raise IOError("Assertion Error: os.path.isfile(filepath)")
 
         self.filepath = filepath
 
