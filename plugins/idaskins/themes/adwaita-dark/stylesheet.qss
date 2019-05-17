@@ -189,6 +189,26 @@ QPushButton:pressed {
     border: 1px solid #215D9C;
 }
 
+TNavBand > QPushButton, nav_scroll_button_t, RegJumpButton {
+    min-height: 0;
+    min-width: 0;
+    padding: 0;
+    border: none;
+}
+
+QPushButton.DockWidgetTitleButton {
+    border: none;
+    min-height: 15px;
+    min-width: 15px;
+    margin: 5px;
+    padding: 3px;
+}
+
+DockWidgetTitle {
+    min-height: 30px;
+    padding-bottom: 5px;
+}
+
 QComboBox {
     border-radius: 2px;
 
@@ -228,13 +248,6 @@ IDADockWidget > QWidget > QAbstractButton {
 
 QRadioButton, QLabel, QCheckBox {
     background: transparent;
-}
-
-TNavBand > QPushButton, RegJumpButton {
-    min-height: 0;
-    min-width: 0;
-    padding: 0 0 0 0;
-    border: none;
 }
 
 EditContainer, ChooserContainer, QGroupBox, QListView, QTreeView {

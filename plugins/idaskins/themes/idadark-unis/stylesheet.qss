@@ -763,6 +763,26 @@ QPushButton:disabled {
 	color: #666;
 }
 
+TNavBand > QPushButton, nav_scroll_button_t, RegJumpButton {
+    min-height: 0;
+    min-width: 0;
+    padding: 0;
+    border: none;
+}
+
+QPushButton.DockWidgetTitleButton {
+    border: none;
+    min-height: 15px;
+    min-width: 15px;
+    margin: 5px;
+    padding: 3px;
+}
+
+DockWidgetTitle {
+    min-height: 30px;
+    padding-bottom: 5px;
+}
+
 /* ComboBox */
 
 QComboBox {
@@ -853,13 +873,6 @@ IDADockWidget > QWidget > QAbstractButton:default {
 IDADockWidget > QWidget > QAbstractButton:pressed {
 	background-color: #888;
     border: 1px solid #0ee;
-}
-
-TNavBand > QPushButton, RegJumpButton {
-	min-height: 0;
-	min-width: 0;
-	padding: 0 0 0 0;
-	border: none;
 }
 
 EditContainer, ChooserContainer, QListView, QTreeView {
