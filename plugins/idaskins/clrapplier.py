@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function
 import os
 import sys
 import ctypes
+import traceback
 
 import idaapi
 import idc
@@ -107,6 +108,7 @@ class NativeHook:
                 res = self.hooks[code]()
                 return cast(res, c_void_p).value
             except:
+                traceback.print_exc()
                 return 0
         else:
             return 0
