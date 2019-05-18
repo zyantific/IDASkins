@@ -10,7 +10,7 @@ import idc
 
 from ctypes import (c_int, c_void_p, create_string_buffer, cast)
 from PyQt5.QtCore import Qt, QTimer, QObject
-from PyQt5.QtGui import QResizeEvent, QFocusEvent
+from PyQt5.QtGui import QShowEvent
 from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QPushButton, qApp
 
 __all__ = ['load_clr_file']
@@ -62,17 +62,15 @@ class TemporaryFilter(QObject):
             return isinstance(
                 obj, QDialog) and 'IDA Colors' in obj.windowTitle()
 
-        if isinstance(event, QResizeEvent) and is_colors_dialog():
-            obj.setWindowFlags(Qt.Window | Qt.FramelessWindowHint)
-            obj.setFixedSize(0, 0)
-            obj.setGeometry(0, 0, 0, 0)
-            event.accept()
-            return 1
-        if isinstance(event, QFocusEvent) and is_colors_dialog():
+        if isinstance(event, QShowEvent) and is_colors_dialog():
             qApp.removeEventFilter(self)
+
+            # Hide window and find &Import button
+            obj.windowHandle().setOpacity(0)
             buttons = [widget for widget in obj.children() if isinstance(
                 widget, QDialogButtonBox)][0]
-            button = buttons.buttons()[-4]
+            button = [widget for widget in buttons.buttons() if widget.text()
+                      == '&Import'][0]
 
             with NativeHook(ask_file=self.ask_file_handler):
                 button.click()
