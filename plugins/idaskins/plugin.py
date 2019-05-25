@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function
 import os
 
 import idaapi
-from idaskins import IDA_DIR, THEMES_DIR
+from idaskins import IDA_DIR, THEMES_DIR, VERSION
 from idaskins.idafontconfig import IdaFontConfig
 from idaskins.objectinspector import ObjectInspector
 from idaskins.settings import Settings
@@ -52,7 +52,9 @@ class IdaSkinsPlugin(QObject, idaapi.plugin_t):
     wanted_hotkey = "Ctrl-Shift-S"
 
     def __init__(self, *args, **kwargs):
-        print("[IDASkins] v2.0.4 by athre0z (zyantific.com) loaded!")
+        print("[IDASkins] {} by athre0z (zyantific.com) loaded!".format(
+            VERSION
+        ))
 
         QObject.__init__(self, *args, **kwargs)
         idaapi.plugin_t.__init__(self)
