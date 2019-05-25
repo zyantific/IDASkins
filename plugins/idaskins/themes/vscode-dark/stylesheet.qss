@@ -1,0 +1,454 @@
+.disasm-font {
+  font-family: "<DISASSEMBLY_FONT_FAMILY>";
+  font-size: <DISASSEMBLY_FONT_SIZE>;
+  font-style: <DISASSEMBLY_FONT_STYLE>;
+  font-weight: <DISASSEMBLY_FONT_WEIGHT>;
+}
+.hexview-font {
+  font-family: "<HEXVIEW_FONT_FAMILY>";
+  font-size: <HEXVIEW_FONT_SIZE>;
+  font-style: <HEXVIEW_FONT_STYLE>;
+  font-weight: <HEXVIEW_FONT_WEIGHT>;
+}
+.text-input-font {
+  font-family: "<TEXT_INPUT_FONT_FAMILY>";
+  font-size: <TEXT_INPUT_FONT_SIZE>;
+  font-style: <TEXT_INPUT_FONT_STYLE>;
+  font-weight: <TEXT_INPUT_FONT_WEIGHT>;
+}
+/* Common properties */
+QWidget {
+  background-color: #1E1E1E;
+  color: #D4D4D4;
+}
+IDAView {
+  border: none;
+  border-bottom: 1px solid #414141;
+  font-family: "<DISASSEMBLY_FONT_FAMILY>";
+  font-size: <DISASSEMBLY_FONT_SIZE>;
+  font-style: <DISASSEMBLY_FONT_STYLE>;
+  font-weight: <DISASSEMBLY_FONT_WEIGHT>;
+}
+hexview_t {
+  border: none;
+  font-family: "<HEXVIEW_FONT_FAMILY>";
+  font-size: <HEXVIEW_FONT_SIZE>;
+  font-style: <HEXVIEW_FONT_STYLE>;
+  font-weight: <HEXVIEW_FONT_WEIGHT>;
+}
+CustomIDAMemo {
+  border: none;
+  font-family: "<TEXT_INPUT_FONT_FAMILY>";
+  font-size: <TEXT_INPUT_FONT_SIZE>;
+  font-style: <TEXT_INPUT_FONT_STYLE>;
+  font-weight: <TEXT_INPUT_FONT_WEIGHT>;
+}
+QToolBar {
+  /* Toolbar */
+  background-color: #333;
+  border: none;
+  padding: 8px;
+  spacing: 8px;
+}
+QToolBar:active {
+  background-color: #3C3C3C;
+}
+QToolBar QWidget {
+  background: transparent;
+}
+QToolBar:handle {
+  image: url(<SKINDIR>/icons/drag.png);
+  padding-right: 10px;
+  padding-left: 0;
+  width: 10px;
+}
+IDAMainWindow > QStatusBar {
+  min-height: 0;
+  height: 27px;
+  padding-left: 7px;
+  background: #007acc;
+}
+IDAMainWindow > QStatusBar:item {
+  border: none;
+}
+IDAMainWindow > QStatusBar QWidget {
+  font-family: 'Consolas', 'Menlo';
+  color: #fff;
+  padding-left: 17px;
+}
+QPushButton {
+  /* Buttons */
+  font-family: 'Segoe UI', 'Helvetica Neue';
+  text-align: center;
+  min-height: 20px;
+  min-width: 50px;
+  border: none;
+  background: #0e639c;
+  padding: 2px 14px;
+}
+QPushButton:hover {
+  background: #17b;
+  border: 1px solid #2D3234;
+}
+QPushButton:default {
+  border: 1px solid #2D3234;
+}
+QPushButton:pressed {
+  border: 1px solid #215D9C;
+}
+QTreeView {
+  font-family: 'Segoe UI', 'Helvetica Neue';
+  border: 1px solid #1B1F20;
+}
+QTreeView:item {
+  font-family: 'Segoe UI', 'Helvetica Neue';
+  font-size: 14px;
+  height: 27.5px;
+}
+QTreeView:item:selected {
+  background-color: #094771;
+}
+QLineEdit {
+  /* Single line edit */
+  font-family: 'Segoe UI', 'Helvetica Neue';
+  border: 1px solid transparent;
+  background: #272727;
+  color: #ccc;
+  padding: 4px;
+}
+QLineEdit:focus {
+  border: 1px solid #135785;
+}
+/* Dock widget without tabs */
+QTabBar {
+  font-family: 'Segoe UI', 'Helvetica Neue';
+  background-color: #252526;
+}
+QTabBar:tab {
+  border-right: 1px solid #252526;
+  background-color: #2D2D2D;
+  height: 43px;
+  text-transform: uppercase;
+  font-size: 14px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+QTabBar:tab:selected {
+  background-color: #1E1E1E;
+}
+QTabBar:close-button {
+  /* For toolbar */
+  image: url(<SKINDIR>/icons/close.png);
+  icon-size: 20px;
+  padding: 0px;
+}
+QTabBar:close-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+QTabBar:close-button:pressed {
+  icon-size: 24px;
+  padding: 1px -1px -1px 1px;
+}
+QMenuBar {
+  /* Menu bar & items */
+  font-family: 'Segoe UI', 'Helvetica Neue';
+  background-color: #333;
+  padding-left: 2px;
+}
+QMenuBar:active {
+  background-color: #3C3C3C;
+}
+QMenuBar:item {
+  background: transparent;
+  color: #ccc;
+  padding: 8px 9px;
+}
+QMenuBar:item:selected {
+  background-color: #505050;
+}
+QTableView {
+  /* Table and headers */
+  font-family: 'Segoe UI', 'Helvetica Neue';
+  border: 1px solid #1B1F20;
+  background-color: #252526;
+}
+QTableView:item {
+  font-family: 'Segoe UI', 'Helvetica Neue';
+  font-size: 14px;
+  height: 27.5px;
+}
+QTableView:item:selected {
+  border: none !important;
+  background-color: #094771;
+}
+QTableView:section:item {
+  background: #1e1e1e !important;
+}
+QTableView QHeaderView:section {
+  background-color: #2D2D2D;
+  border: none;
+}
+QTableView QHeaderView:section:horizontal {
+  padding: 5px;
+  border-left: 1px solid #2D3234;
+}
+QTableView QHeaderView:section:vertical {
+  padding: 0;
+  background: transparent;
+}
+QTableView QTableCornerButton:section {
+  background: #2D3234;
+  border: 0px outset #000;
+}
+QListView {
+  border: 1px solid #1B1F20;
+}
+QListView:item {
+  font-family: 'Segoe UI', 'Helvetica Neue';
+  font-size: 14px;
+  height: 27.5px;
+}
+QListView:item:selected {
+  background-color: #094771;
+}
+QCheckBox {
+  background-color: #D4D4D4;
+}
+QCheckBox,
+QLabel,
+QRadioButton {
+  background: transparent;
+}
+QMenu {
+  background-color: #252526;
+  padding-bottom: 8px;
+}
+QMenu:item {
+  font-weight: 400;
+  padding: 6px 40px 3px 40px;
+}
+QMenu:item:selected {
+  background-color: #094771;
+}
+QMenu:right-arrow {
+  image: url(<SKINDIR>/icons/menu.png);
+  margin: 5px 15px 5px 5px;
+}
+QMenu:icon {
+  padding-left: 20px;
+}
+QMenu:separator {
+  height: 1px;
+  background: #616162;
+  width: 1px;
+  margin: 6px;
+}
+QComboBox {
+  /* Combobox which is editable or not editable */
+  background: #3c3c3c;
+  border: 1px solid #1B1F20;
+  padding: 4px;
+}
+QComboBox:focus,
+QComboBox:on {
+  border: 1px solid #135785;
+  border: 1px solid transparent;
+}
+QComboBox:editable {
+  border: 1px solid transparent;
+}
+QComboBox QLineEdit {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+QComboBox:drop-down {
+  subcontrol-origin: padding;
+  subcontrol-position: top right;
+  border: none;
+  width: 20px;
+}
+QComboBox:drop-down:editable {
+  subcontrol-origin: padding;
+  subcontrol-position: top right;
+  border: none;
+  width: 20px;
+}
+QComboBox:down-arrow {
+  image: url(<SKINDIR>/icons/expand.png);
+  margin: 0;
+}
+QComboBox > QLineEdit {
+  border: none;
+  min-height: default;
+}
+QComboBox > QLineEdit:hover {
+  border: none;
+  min-height: default;
+}
+QComboBox > QLineEdit:focus {
+  border: none;
+  min-height: default;
+}
+QComboBox QAbstractItemView {
+  background: #3c3c3c;
+  outline: none;
+  selection-background-color: #062f4a;
+}
+QComboBox:focus {
+  border: 1px solid #215D9C;
+}
+QComboBox QLineEdit:focus {
+  border-right: none;
+}
+QTextEdit {
+  /* Multiple line edit */
+  background-color: #2D3234;
+  border: 1px solid #1B1F20;
+}
+TNavBand > QPushButton,
+nav_scroll_button_t {
+  border: none;
+  background: transparent;
+  min-height: default;
+  min-width: default;
+  padding: default;
+  border-radius: default;
+}
+RegJumpButton {
+  min-height: 0;
+  min-width: 0;
+  border: none;
+  padding: 0;
+}
+/* Dock widget which has tabs */
+DockWidgetTitle {
+  font: 14px 'Segoe UI', 'Helvetica Neue';
+  background: #252526;
+  text-transform: uppercase;
+  min-height: 0px;
+  height: 43px;
+  padding: 0px 5px 0px 5px;
+  border: none;
+}
+DockWidgetTitle DockWidgetTitleButton {
+  color: #fff;
+  background: transparent;
+  border: none;
+  min-height: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+DockWidgetTitle DockWidgetTitleButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+DockWidgetTitle DockWidgetTitleButton[toolTip="Close"] {
+  qproperty-icon: url(<SKINDIR>/icons/close.png);
+  icon-size: 20px;
+}
+DockWidgetTitle DockWidgetTitleButton[toolTip="Fullscreen"] {
+  qproperty-icon: url(<SKINDIR>/icons/fullscreen.png);
+  icon-size: 20px;
+}
+DockWidgetTitle DockWidgetTitleButton[toolTip="Float"] {
+  qproperty-icon: url(<SKINDIR>/icons/float.png);
+  icon-size: 20px;
+}
+EditContainer {
+  border: 1px solid #1B1F20;
+  font-family: "<TEXT_INPUT_FONT_FAMILY>";
+  font-size: <TEXT_INPUT_FONT_SIZE>;
+  font-style: <TEXT_INPUT_FONT_STYLE>;
+  font-weight: <TEXT_INPUT_FONT_WEIGHT>;
+}
+QScrollBar {
+  /* Scrollbar */
+  background-color: #1E1E1E;
+  border: 0px solid #383838;
+  margin: 0;
+  padding: 0;
+}
+QScrollBar:horizontal {
+  border-top-width: 1px;
+  height: 12px;
+}
+QScrollBar:vertical {
+  border-left-width: 1px;
+  width: 12px;
+}
+QScrollBar:sub-line {
+  width: 0;
+  height: 0;
+}
+QScrollBar:add-line {
+  width: 0;
+  height: 0;
+}
+QScrollBar:add-page {
+  background: none;
+  width: 0;
+  height: 0;
+}
+QScrollBar:sub-page {
+  background: none;
+  width: 0;
+  height: 0;
+}
+QScrollBar:handle {
+  background-color: rgba(121, 121, 121, 0.4);
+}
+QScrollBar:handle:vertical {
+  min-height: 20px;
+}
+QScrollBar:handle:horizontal {
+  min-width: 20px;
+}
+QScrollBar:handle:hover {
+  background-color: rgba(100, 100, 100, 0.7);
+}
+ChooserContainer {
+  border: 1px solid #1B1F20;
+}
+QGroupBox {
+  border: 1px solid #1B1F20;
+  margin-top: 5px;
+}
+QGroupBox:title {
+  subcontrol-origin: margin;
+  subcontrol-position: top center;
+}
+TextArrows {
+  border-bottom: 1px solid #414141;
+}
+IDADockWidget[objectName="Output window"] {
+  /* Output window */
+  qproperty-windowIcon: url(<SKINDIR>/icons/blank.png);
+}
+IDADockWidget[objectName="Output window"] DockWidgetTitle {
+  background: #1e1e1e;
+  color: #e7e7e7;
+  margin: 0;
+}
+IDADockWidget[objectName="Output window"] QTextEdit:focus {
+  border: 1px solid #215D9C;
+}
+IDADockWidget[objectName="Output window"] QLineEdit {
+  padding-bottom: 2px;
+}
+IDADockWidget[objectName="Output window"] QGroupBox {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+IDADockWidget[objectName="Output window"] QGroupBox QPushButton {
+  border: none;
+  text-transform: uppercase;
+  min-width: 70px;
+}
+IDADockWidget[objectName="Output window"] QGroupBox QPushButton:hover {
+  border: none;
+}
+IDADockWidget[objectName="Output window"] QGroupBox QPushButton:focus {
+  border: none;
+}

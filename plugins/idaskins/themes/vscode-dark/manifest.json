@@ -1,0 +1,8 @@
+{
+    "theme_name": "VSCode dark",
+    "author": "Microsoft (ported by jinmo)",
+    "version": "v0.1",
+    "preview_image": "preview.png",
+    "clr_file": "vscode-dark.clr",
+    "qss_file": "stylesheet.qss"
+}
