@@ -51,6 +51,7 @@ ff00ff	 //Line prefix: current line
 000000	 //Punctuation
 d4d4d4	 //Opcode bytes
 000000	 //Manual operand
+32cd32	 //Error
 [NAVBAR]
 ffffaa	 //Library function
 e8a200	 //Regular function
@@ -62,6 +63,7 @@ c086c5	 //External symbol
 000000	 //Gaps
 7fffff	 //Cursor
 00aaff	 //Address
+32cd32	 //Lumina function
 [DEBUG]
 184b4b	 //Current IP
 ffa0a0	 //Current IP (+ enabled breakpoint)
@@ -74,6 +76,7 @@ ffa0a0	 //Current IP (+ enabled breakpoint)
 858585	 //Registers
 d69c56	 //Registers (changed)
 800080	 //Registers (edited)
+808080	 //Registers (unavailable)
 [ARROW]
 c0c0c0	 //Jump in current function
 0000ff	 //Jump external to function
@@ -81,9 +84,9 @@ c0c0c0	 //Jump in current function
 008000	 //Jump target
 ff4040	 //Register target
 [GRAPH]
-ffffff	 //Top color
-fff8e0	 //Bottom color
-ffffff	 //Normal title
+3c3c3c	 //Top color
+3c3c3c	 //Bottom color
+4b4b4b	 //Normal title
 f9f9b1	 //Selected title
 cfcfa0	 //Current title
 00ffff	 //Group frame
