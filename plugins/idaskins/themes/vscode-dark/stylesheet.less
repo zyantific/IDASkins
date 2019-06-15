@@ -79,11 +79,18 @@ QToolBar {
         background: transparent;
     }
 
-    &:handle {
+    &:handle:horizontal {
         image        : url(<SKINDIR>/icons/drag.png);
         padding-right: 10px;
         padding-left : 0;
         width        : 10px;
+    }
+
+    &:handle:vertical {
+        image         : url(<SKINDIR>/icons/drag-vertical.png);
+        padding-bottom: 10px;
+        padding-left  : 0;
+        height        : 10px;
     }
 }
 

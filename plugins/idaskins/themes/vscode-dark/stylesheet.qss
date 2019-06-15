@@ -56,11 +56,17 @@ QToolBar:active {
 QToolBar QWidget {
   background: transparent;
 }
-QToolBar:handle {
+QToolBar:handle:horizontal {
   image: url(<SKINDIR>/icons/drag.png);
   padding-right: 10px;
   padding-left: 0;
   width: 10px;
+}
+QToolBar:handle:vertical {
+  image: url(<SKINDIR>/icons/drag-vertical.png);
+  padding-bottom: 10px;
+  padding-left: 0;
+  height: 10px;
 }
 IDAMainWindow > QStatusBar {
   min-height: 0;
