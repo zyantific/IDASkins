@@ -4,6 +4,11 @@ IDA Skins
 Plugin providing advanced skinning support for IDA Pro utilizing [Qt
 stylesheets](http://qt-project.org/doc/qt-4.7/stylesheet.html), similar to CSS.
 
+## Important: This plugin is now deprecated
+IDA 7.3 [added theming support](https://www.hex-rays.com/products/ida/7.3/index.shtml) directly into IDA itself and ships with a forked version of the `ISASkins dark` theme.
+We will keep maintaining this plugin for a while for users of old IDA verions, but it will be shelved eventually. 
+New themes should be developed for IDA directly.
+
 ## Screenshot
 
 #### `VSCode dark` theme
