@@ -1,0 +1,238 @@
+QWidget {
+    background-color: #363636;
+    color: #ddd;
+}
+
+QCheckBox {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+QTextEdit {
+    background-color: #2d2d2d;
+    border: 1px solid #363636;
+    border-radius: 2px;
+}
+
+QMenuBar, QMenuBar::item {
+    background-color: #444444;
+    color: #ddd;
+}
+
+QMenu::item:selected {
+    background-color: #2A2A2A;
+}
+
+QLineEdit {
+    border: 1px solid #474747;
+    min-height: 20px;
+    border-radius: 2px;
+}
+
+QLineEdit:hover, QLineEdit:focus {
+    border: 1px solid #00aaaa;
+}
+
+QTabBar::tab {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                      stop: 0 #555555, stop: 1 #444444);
+}
+
+QTabBar::tab:selected {
+    background-color: #777777;
+}
+
+QTableView {
+    border: 1px solid #474747;
+    background-color: #2d2d2d;
+}
+
+QHeaderView::section {
+    background-color: #444;
+    border: none;
+    border-left: 1px solid #666;
+    border-right: 1px solid #333;
+    padding-top: 3px;
+    padding-left: 4px;
+    min-height: 20px;
+}
+
+QTableCornerButton::section {
+    background: #222;
+    border: 2px outset #222;
+ }
+
+IDAView, hexview_t, CustomIDAMemo {
+	border: none;
+}
+
+CustomIDAMemo, EditContainer {
+    font-family: "<TEXT_INPUT_FONT_FAMILY>";
+    font-size: <TEXT_INPUT_FONT_SIZE>;
+    font-style: <TEXT_INPUT_FONT_STYLE>;
+    font-weight: <TEXT_INPUT_FONT_WEIGHT>;
+}
+
+IDAView {
+    font-family: "<DISASSEMBLY_FONT_FAMILY>";
+    font-size: <DISASSEMBLY_FONT_SIZE>;
+    font-style: <DISASSEMBLY_FONT_STYLE>;
+    font-weight: <DISASSEMBLY_FONT_WEIGHT>;
+}
+
+hexview_t {
+    font-family: "<HEXVIEW_FONT_FAMILY>";
+    font-size: <HEXVIEW_FONT_SIZE>;
+    font-style: <HEXVIEW_FONT_STYLE>;
+    font-weight: <HEXVIEW_FONT_WEIGHT>;
+}
+
+/* TODO: DEBUG_REGISTERS, OUTPUT_WINDOW */
+
+QScrollBar {
+    background-color: #363636;
+    width: 20px;
+    height: 20px;
+    margin: 0 0 0 0;
+}
+
+QScrollBar::sub-line, QScrollBar::add-line {
+    width: 0;
+    height: 0;
+}
+
+QScrollBar::add-page, QScrollBar::sub-page {
+    background: none;
+}
+
+QScrollBar::handle:vertical {
+    min-height: 20px;
+}
+
+QScrollBar::handle:horizontal {
+    min-width: 20px;
+}
+
+QScrollBar::handle {
+    background-color: #585858;
+    margin: 3px;
+    border-radius: 7px;
+}
+
+QToolBar {
+    border: none;
+}
+
+QPushButton {
+    border: 1px solid #077;
+    text-align: center;
+    min-height: 20px;
+    min-width: 50px;
+    padding: 0 6px 0 6px;
+    border-radius: 2px;
+}
+
+QPushButton:hover, QPushButton:default {
+    border: 1px solid #0aa;
+}
+
+QPushButton:pressed {
+    border: 1px solid #0ee;
+}
+
+TNavBand > QPushButton, nav_scroll_button_t, RegJumpButton {
+	min-height: 0;
+	min-width: 0;
+	padding: 0;
+	border: none;
+}
+
+QPushButton.DockWidgetTitleButton {
+    border: none;
+    min-height: 15px;
+    min-width: 15px;
+    margin: 5px;
+    padding: 3px;
+}
+
+DockWidgetTitle {
+    min-height: 30px;
+    padding-bottom: 5px;
+}
+
+QComboBox {
+    border: 1px solid #474747;
+    border-radius: 2px;
+}
+
+QComboBox > QLineEdit, QComboBox > QLineEdit:hover, QComboBox > QLineEdit:focus {
+    border: none;
+    min-height: default;
+}
+
+QComboBox:hover, QComboBox:focus {
+    border: 1px solid #00aaaa;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+
+    border-left-width: 1px;
+    border-left-color: #666;
+    border-left-style: solid;
+}
+
+QComboBox::down-arrow {
+    image: url(<SKINDIR>/icons/expand.png);
+}
+
+/* Close, maximize and undock button for dock widgets */
+IDADockWidget > QWidget > QAbstractButton {
+    background-color: #666;
+    border-radius: 3px;
+}
+
+QRadioButton, QLabel, QCheckBox {
+    background: transparent;
+}
+
+EditContainer, ChooserContainer, QGroupBox, QListView, QTreeView {
+    border: 1px solid #606060;
+    border-radius: 2px;
+}
+
+QGroupBox {
+    margin-top: 5px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+}
+
+/* Remove border from IDC/Python switch button */
+CLIWidget > QGroupBox > QPushButton,
+CLIWidget > QGroupBox > QPushButton:hover,
+CLIWidget > QGroupBox > QPushButton:focus {
+    border: none;
+}
+
+CLIWidget > QGroupBox {
+    margin-top: 0;
+}
+
+QTreeView::item:selected, QListView::item:selected, QTableView::item:selected {
+    background-color: #474747;
+    color: #ddd;
+}
+
+QToolTip, QTipLabel {
+    border: 1px solid #077;
+    border-radius: 2px;
+    background: #111111;
+    color: #ddd;
+    margin: 0;
+    padding: 0;
+}
+

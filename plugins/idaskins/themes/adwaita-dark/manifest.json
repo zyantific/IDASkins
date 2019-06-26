@@ -1,0 +1,8 @@
+{
+    "theme_name": "adwaita-dark",
+    "author": "williballenthin",
+    "version": "v1.0",
+    "preview_image": "preview.png",
+    "clr_file": "adwaita-dark.clr",
+    "qss_file": "stylesheet.qss"
+}
